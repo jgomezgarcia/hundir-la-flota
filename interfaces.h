@@ -4,5 +4,7 @@
 void menuPrincipal();
 void menuPartida();
 void menuConfiguracion();
+void introducirDatos();
+void mostrarDatos();
 
 #endif // __INTERFACES_H__

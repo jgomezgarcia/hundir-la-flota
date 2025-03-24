@@ -21,7 +21,7 @@ void menuPrincipal(){
     Sleep(500);
 
     while (valido==0) {  // Bucle infinito hasta que se ingrese una opción válida
-        printf("Tu opcion: ");
+        printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
         }else if (op >= 1 && op <= 3) {
@@ -62,7 +62,7 @@ void menuConfiguracion(){
     Sleep(500);
 
     while (valido==0) { // Bucle infinito hasta que se ingrese una opción válida
-        printf("Tu opcion: ");
+        printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
         }else if (op >= 1 && op <= 6) {
@@ -75,9 +75,9 @@ void menuConfiguracion(){
     }
 
     switch (op){
-    case 1: //por determinar
+    case 1: introducirDatos();
             break;
-    case 2: //por determinar
+    case 2: mostrarDatos();
             break;
     case 3: //por determinar
             break;
@@ -85,7 +85,7 @@ void menuConfiguracion(){
             break;
     case 5: //por determinar
             break;
-    case 6: //por determinar
+    case 6: menuPrincipal();
             break;
         }
 }
@@ -105,7 +105,7 @@ void menuPartida(){
     Sleep(500);
 
     while (valido==0) {  // Bucle infinito hasta que se ingrese una opción válida
-        printf("Tu opcion: ");
+        printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
         }else if (op >= 1 && op <= 4) {
@@ -124,8 +124,31 @@ void menuPartida(){
             break;
     case 3: //por determinar
             break;
-    case 4: //por determinar
+    case 4: menuPrincipal();
             break;
         }
+}
+
+void mostrarDatos(){
+    system("cls");
+    printf("****************************\n\nRESUMEN DE DATOS\n\n****************************\n\n");
+    //printf("\nDatos del jugador 1:\nNombre: %s\nID: %d, Disparo: %c\nNumero de disparos: %d\nGanador: %d", jugador.jugador1.Nom_jugador, jugador.jugador1.Id_jugador, jugador.jugador1.Tipo_disparo, jugador.jugador1.Num_disparos, jugador.jugador1.Ganador_Ronda);
+    //printf("\nDatos del jugador 2:\nNombre: %s\nID: %d, Disparo: %c\nNumero de disparos: %d\nGanador: %d", jugador.jugador2.Nom_jugador, jugador.jugador2.Id_jugador, jugador.jugador2.Tipo_disparo, jugador.jugador2.Num_disparos, jugador.jugador2.Ganador_Ronda);
+    //Funcion para ver los barcos que se han escogido usar
+    //barcosUsados();
+}
+
+void introducirDatos(){
+    system("cls");
+    printf("****************************\n\nINTRODUCIR DATOS\n\n****************************\n\n");
+    //Funcion para introducir datos en estructura jugador
+
+    //Barcos disponibles de escoger
+    barcos *barcosMain;
+    int n = 5;
+    barcosMain = cargar_barcos(&n);
+    listar_barcos(barcosMain, 5);
+
+    //Funcion para introducir datos en estructura barcos
 }
 
