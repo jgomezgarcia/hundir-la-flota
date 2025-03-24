@@ -9,6 +9,15 @@ typedef struct{
   int Tam_Barco;
 }barcos;
 
-barcos * cargar_barcos();
+typedef struct{
+  int Id_Jugador;
+  char Nom_Jugador[21];
+  char Tipo_Disparo;  //Automático(A) y Manual(M)
+  int Num_Disparos;
+  int Ganador_Ronda;  //0 perderdor y 1 ganador
+} jugador;
+
+barcos * cargar_barcos(int *);
+void listar_barcos(barcos *, int);
 
 #endif // __CONFIGURACION__H__
