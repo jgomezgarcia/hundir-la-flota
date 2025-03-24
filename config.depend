@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1742775377 source:c:\users\francisco\documents\config\configuracion.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"configuracion.h"
+
+1742774601 c:\users\francisco\documents\config\configuracion.h
+
+1742775447 source:c:\users\francisco\documents\config\main.c
+	<stdio.h>
+	<stdlib.h>
+	"configuracion.h"
+
