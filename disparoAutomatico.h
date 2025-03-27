@@ -1,38 +1,11 @@
-#include "disparo_automatico.h"
-#include <time.h>
+#ifndef DISPARO_AUTOMATICO_H_INCLUDED
+#define DISPARO_AUTOMATICO_H_INCLUDED
 
-void disparo_automatico(char tablero[FILAS][COLUMNAS]){
-    int fila, columna, direccion, disparo_acertado = 0;
-    int direcciones[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+#include "tablero.h"
+#include "jugador.h"
+#include <stdlib.h>
 
-    srand(time(NULL));
+void disparo_automatico(char tablero_oponente[N][N], int *fila, int *columna, int *ultimo_fila, int *ultimo_columna, int *tocado);
 
-    do {
-        fila = rand() % FILAS;
-        columna = rand() % COLUMNAS;
-    } while (tablero[fila][columna] == TOCADO || tablero[fila][columna] == AGUA);
 
-    if(tablero[fila][columna] != BARCO)
-        tablero[fila][columna] = AGUA
-
-    else {
-
-        tablero[fila][columna] = TOCADO
-        for (int i = 0; i < 8; i++){
-            int nueva_fila = fila + direcciones[i][0];
-            int nueva_columna = columna + direcciones[i][1];
-
-            if(nueva_fila >= 0 && nueva_fila < FILAS && nueva_columna >= 0 && nueva_columna < COLUMNAS && tablero[nueva_fila][nueva_columna] == BARCO)
-                tablero[nueva_fila][nueva_columna] = TOCADO
-
-            else {
-                if (tablero[nueva_fila][nueva_columna] == ' ')
-                    tablero[nueva_fila][nueva_columna] = AGUA
-
-                return;
-            }
-
-        }
-    }
-
-}
+#endif // DISPARO_AUTOMATICO_H_INCLUDED
