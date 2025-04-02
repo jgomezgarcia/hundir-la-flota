@@ -10,10 +10,10 @@
 //Cabecera: (char **) colocarBarcos (Jugadores*, int )
 //Postcondición: devuelve una matriz con los barcos colocados
 
-char ** colocarBarcos(jugador * jug, int numBarcos){
+char ** colocarBarcos(jugador * jug, Barcos *barcos, int numBarcos){
 	inicializarTablero(jug);
     	for (int i = 0; i < numBarcos; i++) {
-        	colocarBarcoUsuario(jug, barcos[i]);
+        	colocarBarcoUsuario(jug, &barcos[i]);
     	}
 
     	return jug->tablero;
@@ -25,7 +25,7 @@ char ** colocarBarcos(jugador * jug, int numBarcos){
 //Cabecera: void colocarBarcoUsuario(Jugadores *, Barco *)
 //Postcondición: coloca el barco que sea necesario
 
-void colocarBarcoUsuario(jugador *jug, barcos *barco) {
+void colocarBarcoUsuario(jugador *jug, Barcos *barco) {
     	int fila, columna, orientacion;
     	int valido = 0;
     	do {
@@ -41,7 +41,7 @@ void colocarBarcoUsuario(jugador *jug, barcos *barco) {
         	}
     	} while (valido == 0);
 
-    	for (int i = 0; i < barco.tamano; i++) {
+    	for (int i = 0; i < barco->tamano; i++) {
         	switch (orientacion){
 			case 0: jug->tablero[fila][columna+i] = 'X'; break;
 			case 1: jug->tablero[fila][columna-i] = 'X'; break;
@@ -52,7 +52,7 @@ void colocarBarcoUsuario(jugador *jug, barcos *barco) {
 			case 6: jug->tablero[fila-i][columna-i] = 'X'; break;
 			case 7: jug->tablero[fila+i][columna-i] = 'X'; break;
 		}
-		marcarZonaSegura(jugador,fila, columna, barco->tamano,orientacion);
+		marcarZonaSegura(jug,fila, columna, barco->tamano,orientacion);
     	}
 
 //Función para saber si en esa posición se puede colocar
@@ -99,24 +99,31 @@ int poderColocar(jugador *jug, int fila, int columna, int tamanoBarco, int orien
 //Postcondicion: devuelve el tablero por referencia con la zona segura marcada
 
 void marcarZonaSegura(jugador *jug, int fila, int col, int tamano, int orientacion) {
-    for (int i = 0; i < tamano; i++) {
+    for (int k = 0; k < tamano; k++) {  // Cambié 'i' por 'k' para evitar conflicto con el 'i' del bucle interno
         int nuevaFila = fila;
-	int nuevaCol = col;
+        int nuevaCol = col;
+
         switch (orientacion) {
-            case 0: nuevaCol = col + i; break;
-            case 1: nuevaCol = col - i; break;
-            case 2: nuevaFila = fila + i; break;
-            case 3: nuevaFila = fila - i; break;
-            case 4: nuevaFila = fila + i; nuevaCol = col + i; break;
-            case 5: nuevaFila = fila - i; nuevaCol = col + i; break;
-            case 6: nuevaFila = fila - i; nuevaCol = col - i; break;
-            case 7: nuevaFila = fila + i; nuevaCol = col - i; break;
+            case 0: nuevaCol = col + k; break;
+            case 1: nuevaCol = col - k; break;
+            case 2: nuevaFila = fila + k; break;
+            case 3: nuevaFila = fila - k; break;
+            case 4: nuevaFila = fila + k; nuevaCol = col + k; break;
+            case 5: nuevaFila = fila - k; nuevaCol = col + k; break;
+            case 6: nuevaFila = fila - k; nuevaCol = col - k; break;
+            case 7: nuevaFila = fila + k; nuevaCol = col - k; break;
         }
+
+        // Marcar las 8 casillas alrededor de cada parte del barco
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 int fSegura = nuevaFila + i;
                 int cSegura = nuevaCol + j;
-                if (fSegura >= 0 && fSegura < FILAS && cSegura >= 0 && cSegura < COLUMNAS && (jug->tablero[fSegura][cSegura]=='A'||jug->tablero[fSegura][cSegura] == '*')) {
+
+                // Verificar que estamos dentro de los límites del tablero
+                if (fSegura >= 0 && fSegura < FILAS &&
+                    cSegura >= 0 && cSegura < COLUMNAS &&
+                    jug->tablero[fSegura][cSegura] != 'X') {  // Solo marcamos si no es parte del barco
                     jug->tablero[fSegura][cSegura] = '*';
                 }
             }
