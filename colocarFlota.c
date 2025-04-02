@@ -10,13 +10,17 @@
 //Cabecera: (char **) colocarBarcos (Jugadores*, int )
 //Postcondición: devuelve una matriz con los barcos colocados
 
-char ** colocarBarcos(jugador * jug, Barcos *barcos, int numBarcos){
-	inicializarTablero(jug);
-    	for (int i = 0; i < numBarcos; i++) {
-        	colocarBarcoUsuario(jug, &barcos[i]);
-    	}
+char **colocarBarcos(jugador *jug, Barcos *barcos, int numBarcos) {
+    inicializarTablero(jug);
+    printf("Tablero inicial:\n");
+    imprimirTablero(jug);
 
-    	return jug->tablero;
+    for (int i = 0; i < numBarcos; i++) {
+        colocarBarcoUsuario(jug, &barcos[i]);
+        printf("\nTablero después de colocar %s:\n", barcos[i].nombre);
+        imprimirTablero(jug);
+    }
+    return jug->tablero;
 }
 
 //Función para colocar cada Barco
@@ -32,12 +36,12 @@ void colocarBarcoUsuario(jugador *jug, Barcos *barco) {
         	printf("\nIngrese la fila y columna inicial donde colocar el barco %s (tamano %d): ", barco->nombre, barco->tamano);
         	scanf("%d %d", &fila, &columna);
 
-		printf("Ingrese la orientación (0 para horizontal hacia derecha, 1 para horizontal hacia inzquierda, 2 para vertical hacia abajo, 3 para vertical hacia arriba, 4 para diagonal derecha-abajo, 5 para diagonal derecha-arriba, 6 para diagonal izquierda-arriba, 7 para diagonal izquierda-abajo): ");
+		printf("Ingrese la orientación \n(0 para horizontal hacia derecha\n1 para horizontal hacia inzquierda\n2 para vertical hacia abajo\n3 para vertical hacia arriba\n4 para diagonal derecha-abajo\n5 para diagonal derecha-arriba\n6 para diagonal izquierda-arriba\n7 para diagonal izquierda-abajo): ");
         	scanf("%d", &orientacion);
 
 		valido = poderColocar(jug, fila, columna, barco->tamano, orientacion);
         	if (valido == 0) {
-            		printf("Ubicación inválida. Recuerde dejar un espacio entre barcos. Intente de nuevo.\n");
+            		printf("Ubicacion invalida. Intente de nuevo.\n");
         	}
     	} while (valido == 0);
 
@@ -54,6 +58,7 @@ void colocarBarcoUsuario(jugador *jug, Barcos *barco) {
 		}
 		marcarZonaSegura(jug,fila, columna, barco->tamano,orientacion);
     	}
+}
 
 //Función para saber si en esa posición se puede colocar
 
@@ -62,7 +67,7 @@ void colocarBarcoUsuario(jugador *jug, Barcos *barco) {
 //Postcondición: Devuelve 0 si se puede colocar y 1 si no se puede
 
 int poderColocar(jugador *jug, int fila, int columna, int tamanoBarco, int orientacion) {
-    if (jug->tablero[fila][columna] == '*' || jug->tablero[fila][columna] == 'B')
+    if (jug->tablero[fila][columna] == '*' || jug->tablero[fila][columna] == 'X')
         return 0;
 
     for (int i = 0; i < tamanoBarco; i++) {
@@ -84,7 +89,7 @@ int poderColocar(jugador *jug, int fila, int columna, int tamanoBarco, int orien
             return 0;
 
         if (jug->tablero[nuevaFila][nuevaCol] == '*' ||
-            jug->tablero[nuevaFila][nuevaCol] == 'B') {
+            jug->tablero[nuevaFila][nuevaCol] == 'X') {
             return 0;
         }
     }
@@ -125,8 +130,28 @@ void marcarZonaSegura(jugador *jug, int fila, int col, int tamano, int orientaci
                     cSegura >= 0 && cSegura < COLUMNAS &&
                     jug->tablero[fSegura][cSegura] != 'X') {  // Solo marcamos si no es parte del barco
                     jug->tablero[fSegura][cSegura] = '*';
-                }
+                    }
             }
         }
     }
 }
+
+// Función para imprimir el tablero
+
+void imprimirTablero(jugador *jug) {
+    printf("\n   ");
+    for (int j = 0; j < COLUMNAS; j++) {
+        printf("%2d ", j); // Encabezado de columnas
+    }
+    printf("\n");
+
+    for (int i = 0; i < FILAS; i++) {
+        printf("%2d ", i); // Encabezado de filas
+        for (int j = 0; j < COLUMNAS; j++) {
+            printf("%2c ", jug->tablero[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
