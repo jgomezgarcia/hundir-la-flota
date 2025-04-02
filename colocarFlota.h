@@ -12,33 +12,34 @@ typedef struct {
     int columnas;
 } Tablero;
 
-//Precondici髇: tener inicializados los tableros y recibir el n鷐ero de barcos para saber las iteraciones
+//Precondici贸n: tener inicializados los tableros y recibir el n煤mero de barcos para saber las iteraciones
 //Cabecera: (char **) colocarBarcos (jugador* jug, int numBarcos)
-//Postcondici髇: devuelve una matriz con los barcos colocados
+//Postcondici贸n: devuelve una matriz con los barcos colocados
 
-char ** colocarBarcos(jugador *, int);
+char ** colocarBarcos(jugador *, barcos *, int);
 
-//Precondici髇: tener inicializado los tableros
+//Precondici贸n: tener inicializado los tableros
 //Cabecera: void colocarBarcoUsuario(jugador *jug, barcos *barco)
-//Postcondici髇: coloca el barco que sea necesario
+//Postcondici贸n: coloca el barco que sea necesario
 
 void colocarBarcoUsuario(jugador *, barcos *);
 
 
-//Precondici髇: Saber la posicion donde se quiere poner el barco, su tama駉 y orientacion
+//Precondici贸n: Saber la posicion donde se quiere poner el barco, su tama帽o y orientacion
 //Cabecera: int poderColocar(jugador *, int fila, int columna , int tamanoBarco, int orientacion)
-//Postcondici髇: Devuelve 0 si se puede colocar y 1 si no se puede
+//Postcondici贸n: Devuelve 0 si se puede colocar y 1 si no se puede
 
 int poderColocar(jugador *, int , int , int , int );
 
-//Precondicion: tener incializado el tablero, pasar el punto inicial y el tama耋 del barco
+//Precondicion: tener incializado el tablero, pasar el punto inicial y el tama帽贸 del barco
 //Cabecera: void marcarZonaSegura(jugador *jug, int fila, int col , int tamano, int orientacion)
 //Postcondicion: devuelve el tablero por referencia con la zona segura marcada
 
 void marcarZonaSegura(jugador *, int , int , int , int );
 
 
-
+//Imprimir el tablero
+void imprimirTablero(jugador *);
 
 
 #endif // COLOCAR_BARCOS_H
