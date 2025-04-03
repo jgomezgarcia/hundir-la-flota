@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "configuracion.h"
-#include "colocarFlota.h"
+#include "config.h"
+#include "colocarflota.h"
+#include <time.h>
 
 
 //Función para colocar barcos
@@ -11,17 +12,30 @@
 //Postcondición: devuelve una matriz con los barcos colocados
 
 char **colocarBarcos(jugador *jug, Barcos *barcos, int numBarcos) {
-    inicializarTablero(jug);
+    srand(time(NULL)); // Inicializar la semilla de aleatoriedad
+    inicializarTablero(&jug);
     printf("Tablero inicial:\n");
-    imprimirTablero(jug);
+    imprimirTablero(&jug);
+
+    int modo;
+    printf("Seleccione el modo de colocación de barcos (1 = Manual, 2 = Automático): ");
+    scanf("%d", &modo);
 
     for (int i = 0; i < numBarcos; i++) {
-        colocarBarcoUsuario(jug, &barcos[i]);
-        printf("\nTablero después de colocar %s:\n", barcos[i].nombre);
-        imprimirTablero(jug);
+        if (modo == 1) {
+            for (int i = 0; i < numBarcos; i++) {
+            colocarBarcoUsuario(jug, &barcos[i]);
+            printf("\nTablero después de colocar %s:\n", barcos[i].nombre);
+            imprimirTablero(&jug);
+            }
+        } else {
+            colocarBarcoAutomatico(jug, &barcos[i]);
+        }
     }
+
     return jug->tablero;
 }
+
 
 //Función para colocar cada Barco
 
@@ -104,7 +118,7 @@ int poderColocar(jugador *jug, int fila, int columna, int tamanoBarco, int orien
 //Postcondicion: devuelve el tablero por referencia con la zona segura marcada
 
 void marcarZonaSegura(jugador *jug, int fila, int col, int tamano, int orientacion) {
-    for (int k = 0; k < tamano; k++) {  // Cambié 'i' por 'k' para evitar conflicto con el 'i' del bucle interno
+    for (int k = 0; k < tamano; k++) {
         int nuevaFila = fila;
         int nuevaCol = col;
 
@@ -135,6 +149,24 @@ void marcarZonaSegura(jugador *jug, int fila, int col, int tamano, int orientaci
         }
     }
 }
+
+void colocarBarcoAutomatico(jugador *jug, Barcos *barco) {
+    int fila, col, horizontal;
+    do {
+        fila = rand() % FILAS;
+        col = rand() % COLUMNAS;
+        horizontal = rand() % 2; // 0 = vertical, 1 = horizontal
+    } while (!poderColocar(jug, fila, col, barco->tamano, horizontal));
+
+    for (int i = 0; i < barco->tamano; i++) {
+        if (horizontal) {
+            jug->tablero[fila][col + i] = 'X';
+        } else {
+            jug->tablero[fila + i][col] = 'X';
+        }
+    }
+}
+
 
 // Función para imprimir el tablero
 
