@@ -169,6 +169,7 @@ void colocarBarcoAutomatico(jugador *jug, Barcos *barco) {
 
 
 // Función para imprimir el tablero
+// Esta no pertenece al modulo como tal
 
 void imprimirTablero(jugador *jug) {
     printf("\n   ");
