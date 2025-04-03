@@ -4,32 +4,10 @@
 #include "colocarFlota.h"
 #include <time.h>
 
-
-//Precondición: tener inicializado los tableros
-//Cabecera: void colocarBarcoUsuario(jugador *jug, barcos *barco)
-//Postcondición: coloca el barco que sea necesario
-
 void colocarBarcoUsuario(jugador *, Barcos *);
-
-
-//Precondición: Saber la posicion donde se quiere poner el barco, su tamaño y orientacion
-//Cabecera: int poderColocar(jugador *, int fila, int columna , int tamanoBarco, int orientacion)
-//Postcondición: Devuelve 0 si se puede colocar y 1 si no se puede
-
 int poderColocar(jugador *, int , int , int , int );
-
-//Precondicion: tener incializado el tablero, pasar el punto inicial y el tamañó del barco
-//Cabecera: void marcarZonaSegura(jugador *jug, int fila, int col , int tamano, int orientacion)
-//Postcondicion: devuelve el tablero por referencia con la zona segura marcada
-
 void marcarZonaSegura(jugador *, int , int , int , int );
-
-//Precondición: saber que el jugador quiere colocarlo automaticamente, tener la estructura de barco
-//Cabecera: void colocarBarcoAutomatico(Jugadores *jugador, Barco barco)
-//Postcondicion: devuelve el puntero a la estructura habiendo cambiado el tablero por uno con los barcos colocados
-
 void colocarBarcoAutomatico(jugador *, Barcos *);
-
 void imprimirTablero(jugador *);
 
 //Función para colocar barcos
