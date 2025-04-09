@@ -6,9 +6,14 @@
 #include <time.h>
 #include "configuracion.h"
 
-//Precondici髇: tener inicializados los tableros y recibir el n鷐ero de barcos para saber las iteraciones
+//Precondici贸n: tener inicializados los tableros y recibir el n煤mero de barcos para saber las iteraciones
 //Cabecera: (char **) colocarBarcos (jugador* jug, int numBarcos)
-//Postcondici髇: devuelve una matriz con los barcos colocados
+//Postcondici贸n: devuelve una matriz con los barcos colocados
 char ** colocarBarcos(jugador *,barcos *, int, int);
+
+//Precondici贸n: jugador no nulo, una estructura de barcos y tener el tama帽贸 del tablero definido
+//Cabecera: void colocarBarcoAutomatico(jugador *jug, barcos barco, int tam_tablero)
+//Postcondici贸n: devuelve colocados los barcos para el jugador m谩quina
+void colocarBarcoAutomatico(jugador *, barcos, int);
 
 #endif // COLOCAR_BARCOS_H
