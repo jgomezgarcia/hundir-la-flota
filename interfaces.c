@@ -3,7 +3,10 @@
 #include <windows.h>
 #include "interfaces.h"
 #include "configuracion.h"
-//#include "" -> Incompleto
+#include "colocarFlota.h"
+#include "posPartida.h"
+#include "resultadoDisparo.h"
+#include "disparoAutomatico.h"
 
 void menuPrincipal(){
 
