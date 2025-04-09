@@ -13,7 +13,7 @@ char ** colocarBarcos(jugador *,barcos *, int, int);
 
 //Precondición: jugador no nulo, una estructura de barcos y tener el tamañó del tablero definido
 //Cabecera: void colocarBarcoAutomatico(jugador *jug, barcos barco, int tam_tablero)
-//Postcondición: devuelve colocados los barcos para el jugador máquina
+//Postcondición: devuelve colocados los barcos para el jugador máquina en su estructura, NO DEVUELVE NINGUN TABLERO
 void colocarBarcoAutomatico(jugador *, barcos, int);
 
 #endif // COLOCAR_BARCOS_H
