@@ -20,7 +20,7 @@ void menuPrincipal(){
     printf("1.Configuracion\n2.Jugar\n3.Salir\n\n");
     Sleep(500);
 
-    while (valido==0) {  // Bucle infinito hasta que se ingrese una opción válida
+    while (valido==0) {  // Bucle infinito hasta que se ingrese una opciÃ³n vÃ¡lida
         printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
@@ -29,7 +29,7 @@ void menuPrincipal(){
         } else {
         printf("\nNumero no valido, introduce una opcion valida.\n");
         }
-        // Limpieza del búfer
+        // Limpieza del bÃºfer
         while (getchar() != '\n');
     }
 
@@ -61,7 +61,7 @@ void menuConfiguracion(){
     printf("1.Introducir datos\n2.Mostrar\n3.Borrar\n4.Guardar\n5.Cargar\n6.Volver\n\n");
     Sleep(500);
 
-    while (valido==0) { // Bucle infinito hasta que se ingrese una opción válida
+    while (valido==0) { // Bucle infinito hasta que se ingrese una opciÃ³n vÃ¡lida
         printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
@@ -70,7 +70,7 @@ void menuConfiguracion(){
         } else {
         printf("\nNumero no valido, introduce una opcion valida.\n");
         }
-        // Limpieza del búfer
+        // Limpieza del bÃºfer
         while (getchar() != '\n');
     }
 
@@ -104,7 +104,7 @@ void menuPartida(){
     printf("1.Jugar Partida\n2.Reiniciar Partida\n3.Reanudar\n4.Volver\n\n");
     Sleep(500);
 
-    while (valido==0) {  // Bucle infinito hasta que se ingrese una opción válida
+    while (valido==0) {  // Bucle infinito hasta que se ingrese una opciÃ³n vÃ¡lida
         printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
@@ -113,7 +113,7 @@ void menuPartida(){
         } else {
         printf("\nNumero no valido, introduce una opcion valida.\n");
         }
-        // Limpieza del búfer
+        // Limpieza del bÃºfer
         while (getchar() != '\n');
     }
 
@@ -132,23 +132,11 @@ void menuPartida(){
 void mostrarDatos(){
     system("cls");
     printf("****************************\n\nRESUMEN DE DATOS\n\n****************************\n\n");
-    //printf("\nDatos del jugador 1:\nNombre: %s\nID: %d, Disparo: %c\nNumero de disparos: %d\nGanador: %d", jugador.jugador1.Nom_jugador, jugador.jugador1.Id_jugador, jugador.jugador1.Tipo_disparo, jugador.jugador1.Num_disparos, jugador.jugador1.Ganador_Ronda);
-    //printf("\nDatos del jugador 2:\nNombre: %s\nID: %d, Disparo: %c\nNumero de disparos: %d\nGanador: %d", jugador.jugador2.Nom_jugador, jugador.jugador2.Id_jugador, jugador.jugador2.Tipo_disparo, jugador.jugador2.Num_disparos, jugador.jugador2.Ganador_Ronda);
-    //Funcion para ver los barcos que se han escogido usar
-    //barcosUsados();
+    
 }
 
 void introducirDatos(){
     system("cls");
     printf("****************************\n\nINTRODUCIR DATOS\n\n****************************\n\n");
-    //Funcion para introducir datos en estructura jugador
-
-    //Barcos disponibles de escoger
-    barcos *barcosMain;
-    int n = 5;
-    barcosMain = cargar_barcos(&n);
-    listar_barcos(barcosMain, 5);
-
-    //Funcion para introducir datos en estructura barcos
 }
 
