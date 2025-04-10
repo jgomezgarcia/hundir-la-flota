@@ -2,7 +2,10 @@
 #include <stdlib.h>
 
 int main()
-{
-    printf("Hello world!\n");
+{    
+    jugador *jugadores;
+    barcos *barcosElegidos;
+    int tam_tablero, num_barcos, tam_lista;
+    menuPrincipal(jugadores, barcosParaJugar, tam_tablero, num_barcos, tam_lista);
     return 0;
 }
