@@ -21,6 +21,7 @@ char ** colocarBarcos(jugador *jug, barcos *barcos, int numBarcos, int tam_table
 
     int modo, respuesta, resultado;
     printf("Seleccione el modo de colocacion de barcos (1 = Manual, 2 = Automatico): ");
+    fflush(stdin);
     scanf("%d", &modo);
 
 
@@ -41,6 +42,7 @@ char ** colocarBarcos(jugador *jug, barcos *barcos, int numBarcos, int tam_table
             imprimirTableroFlota(jug->Tablero_flota, tam_tablero);
 
             printf("\n¿Esta satisfecho con esta disposicion? (1 = Si, 0 = No): ");
+	    fflush(stdin);
             scanf("%d", &resultado);
 
             if (resultado != 1) {
