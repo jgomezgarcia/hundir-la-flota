@@ -50,8 +50,7 @@ void disparo_automatico(char tablero_oponente[N][N], int *fila, int *columna, in
 
 }
 
-void disparo_manual(Jugador *jugador, Jugador *oponente) {
-    int fila, columna;
+void disparo_manual(Jugador *jugador, Jugador *oponente,int *filas,int *columnas) {
 
     //le enseñamos el tablero del oponente para que vea donde puede disparar
     printf("\nTablero de disparos de %s:\n", jugador->nombre);
