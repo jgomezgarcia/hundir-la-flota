@@ -23,7 +23,7 @@ void menuPrincipal(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, 
     printf("1.Configuracion\n2.Jugar\n3.Salir\n\n");
     Sleep(500);
 
-    while (valido==0) {  // Bucle infinito hasta que se ingrese una opci髇 v醠ida
+    while (valido==0) {  // Bucle infinito hasta que se ingrese una opci贸n v谩lida
         printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
@@ -32,7 +32,7 @@ void menuPrincipal(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, 
         } else {
         printf("\nNumero no valido, introduce una opcion valida.\n");
         }
-        // Limpieza del b鷉er
+        // Limpieza del b煤fer
         while (getchar() != '\n');
     }
 
@@ -64,7 +64,7 @@ void menuConfiguracion(jugador *jugadores, barcos *barcosElegidos, int tam_table
     printf("1.Introducir datos\n2.Mostrar\n3.Borrar\n4.Guardar\n5.Cargar\n6.Volver\n\n");
     Sleep(500);
 
-    while (valido==0) { // Bucle infinito hasta que se ingrese una opci髇 v醠ida
+    while (valido==0) { // Bucle infinito hasta que se ingrese una opci贸n v谩lida
         printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
@@ -73,7 +73,7 @@ void menuConfiguracion(jugador *jugadores, barcos *barcosElegidos, int tam_table
         } else {
         printf("\nNumero no valido, introduce una opcion valida.\n");
         }
-        // Limpieza del b鷉er
+        // Limpieza del b煤fer
         while (getchar() != '\n');
     }
 
@@ -109,7 +109,7 @@ void menuPartida(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, in
     printf("1.Jugar Partida\n2.Reiniciar Partida\n3.Reanudar\n4.Volver\n\n");
     Sleep(500);
 
-    while (valido==0) {  // Bucle infinito hasta que se ingrese una opci髇 v醠ida
+    while (valido==0) {  // Bucle infinito hasta que se ingrese una opci贸n v谩lida
         printf("\nTu opcion: ");
         if ((scanf("%d", &op)) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
@@ -118,13 +118,13 @@ void menuPartida(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, in
         } else {
         printf("\nNumero no valido, introduce una opcion valida.\n");
         }
-        // Limpieza del b鷉er
+        // Limpieza del b煤fer
         while (getchar() != '\n');
     }
 
     switch (op){
     case 1:
-            //Colocaci髇 de barcos en base al tipo de disparo
+            //Colocaci贸n de barcos en base al tipo de disparo
             for(int i = 0; i<MAX_JUGADORES; i++){
                 if(jugador[i]->Tipo_Disparo=='M'){
                     colocarBarcos(&jugador[i], barcosElegidos, numBarcos, tam_tablero);
