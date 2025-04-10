@@ -16,6 +16,7 @@ static void marcarZonaSegura(jugador *, int , int , int , int , int);
 
 char ** colocarBarcos(jugador *jug, barcos *barcos, int numBarcos, int tam_tablero) {
     srand(time(NULL)); // Inicializar la semilla de aleatoriedad
+    printf("Turno de colocacion de barcos de %s:\n", jug->Nom_jugador);
     printf("=======TABLERO INICIAL=======\n");
     imprimirTableroFlota(jug->Tablero_flota, tam_tablero);
 
@@ -54,7 +55,7 @@ char ** colocarBarcos(jugador *jug, barcos *barcos, int numBarcos, int tam_table
         } while (respuesta != 1);
 
     }
-    printf("\n\n=======TABLERO FINAL=======\n");
+    printf("\n\n=======TABLERO FINAL de %s =======\n", jug->Nom_jugador);
     imprimirTableroFlota(jug->Tablero_flota, tam_tablero);
 
     //Ahora se transcribe el tablero para que se vean solo los barcos, es decir, la zona segura no se ve
