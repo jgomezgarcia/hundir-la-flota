@@ -156,22 +156,17 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                 for (int i = 0; i < MAX_JUGADORES; i++) {
                     system("cls");
                     printf("=== COLOCANDO BARCOS PARA %s ===\n\n", (*jugadores)[i].Nom_Jugador);
-
-                    // Llamada corregida a colocarBarcos
                     colocarBarcos(&(*jugadores)[i], *barcosElegidos, numBarcos, tam_tablero);
-
+                    
                     //NO SE SI SE QUIERE IMPRIMIR EL TABLERO
                     //printf("\nTablero final de %s:\n", (*jugadores)[i].Nom_Jugador);
                     //imprimirTableroFlota((*jugadores)[i].Tablero_flota, tam_tablero);
 
                     guardarPartida(*barcosElegidos, *jugadores, tam_lista, numBarcos, tam_tablero);
-
                     printf("\nPresiona Enter para continuar...");
                     limpiarBuffer();
                     getchar();
                 }
-
-
                 printf("\n¡Todos los barcos han sido colocados!\n");
                 printf("Preparados para comenzar la batalla...\n");
                 Sleep(2000);
@@ -182,6 +177,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                 break;
             }
             case 2:
+                // Aquí iriía la lógica de reiniciar la partida
                 printf("\nPartida reiniciada.\n");
                 Sleep(1000);
                 return;
