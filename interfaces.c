@@ -8,145 +8,185 @@
 #include "resultadoDisparo.h"
 #include "disparoAutomatico.h"
 
-void menuPrincipal(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, int numBarcos, int tam_lista){
+// Función para limpiar el buffer de entrada
+void limpiarBuffer() {
+    while (getchar() != '\n');
+}
 
-    int op;
+// Función para mostrar el encabezado de un menú
+static void mostrarEncabezado(const char *titulo) {
+    system("cls");
+    printf("****************************\n\n");
+    printf("%s\n\n", titulo);
+    printf("****************************\n\n");
+    Sleep(500);
+}
+
+// Función para obtener una opción válida del usuario
+static int obtenerOpcion(int min, int max) {
+    int opcion;
     int valido = 0;
 
-    system("cls"); //Limpia la terminal
-
-    printf("****************************\n\nBIENVENIDO A HUNDIR LA FLOTA\n\n****************************\n\n");
-    Sleep(500);
-
-    printf ("Elige que quieres hacer\n\n");
-    printf("Opciones:\n\n");
-    printf("1.Configuracion\n2.Jugar\n3.Salir\n\n");
-    Sleep(500);
-
-    while (valido==0) {  // Bucle infinito hasta que se ingrese una opción válida
+    while (!valido) {
         printf("\nTu opcion: ");
-        if ((scanf("%d", &op)) != 1) {
+        if (scanf("%d", &opcion) != 1) {
             printf("\nEntrada invalida, debes introducir un numero\n");
-        }else if (op >= 1 && op <= 3) {
-        valido = 1;
+        } else if (opcion >= min && opcion <= max) {
+            valido = 1;
         } else {
-        printf("\nNumero no valido, introduce una opcion valida.\n");
+            printf("\nNumero no valido, introduce una opcion entre %d y %d.\n", min, max);
         }
-        // Limpieza del búfer
-        while (getchar() != '\n');
+        limpiarBuffer();
     }
 
+    return opcion;
+}
 
-    switch (op){
-    case 1: menuConfiguracion(jugadores, barcosElegidos, tam_tablero, numBarcos, tam_lista);
-            break;
-    case 2: menuPartida();
-            break;
-    case 3: Sleep(500);
-            system("cls");
-            Sleep(500);
-            printf("Saliendo del juego...\n");
-            Sleep(1000);
-            exit(1);
+void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista) {
+    while (1) {  // Bucle infinito para mantener el programa activo
+        mostrarEncabezado("BIENVENIDO A HUNDIR LA FLOTA");
+
+        printf("Opciones:\n\n");
+        printf("1. Configuracion\n");
+        printf("2. Jugar\n");
+        printf("3. Salir\n\n");
+        Sleep(500);
+
+        int op = obtenerOpcion(1, 3);
+
+        switch (op) {
+            case 1:
+                menuConfiguracion(jugadores, barcosElegidos, tam_tablero, numBarcos, tam_lista);
+                break;
+            case 2:
+                if (*jugadores == NULL || *barcosElegidos == NULL) {
+                    printf("\nDebes configurar la partida primero!\n");
+                    Sleep(1000);
+                } else {
+                    menuPartida(jugadores, barcosElegidos, *tam_tablero, *numBarcos, *tam_lista);
+                }
+                break;
+            case 3:
+                mostrarEncabezado("SALIENDO DEL JUEGO");
+                printf("Gracias por jugar. Hasta pronto!\n");
+                Sleep(1000);
+                exit(0);
+        }
     }
 }
 
-void menuConfiguracion(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, int numBarcos, int tam_lista){
-    int op;
-    int valido = 0;
-    system("cls");
-    Sleep(500);
-    printf("****************************\n\nCONFIGURACION\n\n****************************\n\n");
-    Sleep(500);
+void menuConfiguracion(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista) {
+    while (1) {  // Bucle para mantener el menú de configuración
+        mostrarEncabezado("CONFIGURACION");
 
-    printf ("Elige que quieres hacer\n\n");
-    printf("Opciones:\n\n");
-    printf("1.Introducir datos\n2.Mostrar\n3.Borrar\n4.Guardar\n5.Cargar\n6.Volver\n\n");
-    Sleep(500);
+        printf("Opciones:\n\n");
+        printf("1. Introducir datos\n");
+        printf("2. Mostrar\n");
+        printf("3. Borrar\n");
+        printf("4. Guardar\n");
+        printf("5. Cargar\n");
+        printf("6. Volver\n\n");
+        Sleep(500);
 
-    while (valido==0) { // Bucle infinito hasta que se ingrese una opción válida
-        printf("\nTu opcion: ");
-        if ((scanf("%d", &op)) != 1) {
-            printf("\nEntrada invalida, debes introducir un numero\n");
-        }else if (op >= 1 && op <= 6) {
-        valido = 1;
-        } else {
-        printf("\nNumero no valido, introduce una opcion valida.\n");
+        int opcion = obtenerOpcion(1, 6);
+
+        switch (opcion) {
+            case 1:
+                *barcosElegidos = barcosParaJugar(numBarcos, tam_lista, tam_tablero);
+                *jugadores = configurarJugador(*tam_tablero, *numBarcos);
+                Sleep(1000);
+                break;
+            case 2:
+                if (*jugadores == NULL || *barcosElegidos == NULL) {
+                    printf("\nNo hay datos configurados todavia!\n");
+                    Sleep(1000);
+                } else {
+                    mostrarConfiguracion(*tam_tablero, *numBarcos, *barcosElegidos, *jugadores);
+                    printf("\nPresiona Enter para continuar...");
+                    getchar();
+                }
+                break;
+            case 3:
+                if (*jugadores != NULL && *barcosElegidos != NULL) {
+                    eliminarConfiguracion(*barcosElegidos, *jugadores, *tam_tablero);
+                    *jugadores = NULL;
+                    *barcosElegidos = NULL;
+                    printf("\nConfiguracion eliminada correctamente.\n");
+                } else {
+                    printf("\nNo hay configuracion para borrar!\n");
+                }
+                Sleep(1000);
+                break;
+            case 4:
+                if (*jugadores != NULL && *barcosElegidos != NULL) {
+                    guardarPartida(*barcosElegidos, *jugadores, *tam_lista, *numBarcos, *tam_tablero);
+                    printf("\nPartida guardada correctamente.\n");
+                } else {
+                    printf("\nNo hay datos para guardar!\n");
+                }
+                Sleep(1000);
+                break;
+            case 5:
+                *barcosElegidos = recuperarBarcos(tam_tablero, numBarcos, tam_lista);
+                *jugadores = recuperarJugadores(*tam_tablero, *numBarcos, *tam_lista);
+                printf("\nPartida cargada correctamente.\n");
+                Sleep(1000);
+                break;
+            case 6:
+                return;  // Salir del menú de configuración
         }
-        // Limpieza del búfer
-        while (getchar() != '\n');
     }
-
-    switch (op){
-    case 1:
-            barcosElegidos = barcosParaJugar(&numBarcos, &tam_lista, &tam_tablero);
-            jugadores = configurarJugador(tam_tablero, numBarcos);
-            break;
-    case 2: mostrarConfiguracion(tam_tablero, numBarcos, barcosElegidos, jugadores);
-            break;
-    case 3: eliminarConfiguracion(barcosElegidos, jugadores, tam_tablero);
-            break;
-    case 4: guardarPartida(barcosElegidos, jugadores, tam_lista, numBarcos, tam_tablero);
-            break;
-    case 5: barcosElegidos = recuperarBarcos(&tam_tablero, &numBarcos, &tam_lista);
-            break;
-    case 6: menuPrincipal(jugadores, barcosElegidos, tam_tablero, numBarcos, tam_lista);
-            break;
-        }
 }
 
-void menuPartida(jugador *jugadores, barcos *barcosElegidos, int tam_tablero, int numBarcos, int tam_lista){
-    int op;
-    int valido = 0, terminado;
+void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista) {
+    while (1) {
+        mostrarEncabezado("PARTIDA");
 
-    system("cls");
-    Sleep(500);
-    printf("****************************\n\nPARTIDA\n\n****************************\n\n");
-    Sleep(500);
+        printf("Opciones:\n\n");
+        printf("1. Jugar Partida\n");
+        printf("2. Reiniciar Partida\n");
+        printf("3. Volver\n\n");
+        Sleep(500);
 
-    printf ("Elige que quieres hacer\n\n");
-    printf("Opciones:\n\n");
-    printf("1.Jugar Partida\n2.Reiniciar Partida\n3.Reanudar\n4.Volver\n\n");
-    Sleep(500);
+        int op = obtenerOpcion(1, 3);
 
-    while (valido==0) {  // Bucle infinito hasta que se ingrese una opción válida
-        printf("\nTu opcion: ");
-        if ((scanf("%d", &op)) != 1) {
-            printf("\nEntrada invalida, debes introducir un numero\n");
-        }else if (op >= 1 && op <= 4) {
-        valido = 1;
-        } else {
-        printf("\nNumero no valido, introduce una opcion valida.\n");
-        }
-        // Limpieza del búfer
-        while (getchar() != '\n');
-    }
+        switch (op) {
+            case 1: {
+                // Colocación de barcos para ambos jugadores
+                for (int i = 0; i < MAX_JUGADORES; i++) {
+                    system("cls");
+                    printf("=== COLOCANDO BARCOS PARA %s ===\n\n", (*jugadores)[i].Nom_Jugador);
 
-    switch (op){
-    case 1:
-            //Colocación de barcos en base al tipo de disparo
-            for(int i = 0; i<MAX_JUGADORES; i++){
-                if(jugador[i]->Tipo_Disparo=='M'){
-                    colocarBarcos(&jugador[i], barcosElegidos, numBarcos, tam_tablero);
+                    // Llamada corregida a colocarBarcos
+                    colocarBarcos(&(*jugadores)[i], *barcosElegidos, numBarcos, tam_tablero);
+
+                    //NO SE SI SE QUIERE IMPRIMIR EL TABLERO
+                    //printf("\nTablero final de %s:\n", (*jugadores)[i].Nom_Jugador);
+                    //imprimirTableroFlota((*jugadores)[i].Tablero_flota, tam_tablero);
+
+                    guardarPartida(*barcosElegidos, *jugadores, tam_lista, numBarcos, tam_tablero);
+
+                    printf("\nPresiona Enter para continuar...");
+                    limpiarBuffer();
+                    getchar();
                 }
-                else{
-                    for(int j =0;j<numBarcos;j++){
-                        colocarBarcoAutomatico(jugador[i], barcosElegidos, tam_tablero);
-                    }
-                }
+
+
+                printf("\n¡Todos los barcos han sido colocados!\n");
+                printf("Preparados para comenzar la batalla...\n");
+                Sleep(2000);
+
+                // Aquí iría la lógica de la partida
+                // ...
+
+                break;
             }
-            system("cls");
-            //
-            do{
-
-            }while();
-
-            break;
-    case 2: //por determinar
-            break;
-    case 3: //por determinar
-            break;
-    case 4: menuPrincipal(jugadores, barcosElegidos, tam_tablero, numBarcos, tam_lista);
-            break;
+            case 2:
+                printf("\nPartida reiniciada.\n");
+                Sleep(1000);
+                return;
+            case 3:
+                return;
         }
+    }
 }
