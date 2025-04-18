@@ -22,6 +22,7 @@ static int validarNumBarcos(int , int);
 static void volcarEnFicheroTableros(char **, char **, int, FILE *);
 static void liberarTableros(int , char **, char **);
 static void recuperarTableros(char **, char *, int, FILE *);
+static int contar_hundidos_jugador(jugador *, int);
 
 
 //Precondición: recibir una cadena ya inicializada y recibe por referencia la estructura barco
@@ -199,31 +200,72 @@ static void recuperarTableros(char **tablero, char *buffer, int tamTableros, FIL
    }
 }
 
-int contarBarcosHundidos(char **flotaOponente, char **oponente, int tam_tablero) {
+// Función para contar barcos hundidos de un jugador
+static int contar_hundidos_jugador(jugador *jug, int tamTablero) {
+    if (jug == NULL || jug->Tablero_oponente == NULL) return 0;
+
+    // Creamos matriz de visitados usando enteros (0 = no visitado, 1 = visitado)
+    int **visitado = (int**)malloc(tamTablero * sizeof(int*));
+    for (int i = 0; i < tamTablero; i++) {
+        visitado[i] = (int*)calloc(tamTablero, sizeof(int));
+    }
+
     int hundidos = 0;
 
-    // Recorremos toda la matriz
-    for (int i = 0; i < tam_tablero; i++) {
-        for (int j = 0; j < tam_tablero; j++) {
-            if (flotaOponente[i][j] == 'X') {
-                // Si hay parte de un barco
-                if (oponente[i][j] == 'H') {
-                    // Comprobamos si es el comienzo de un barco
-                    // y si está completamente hundido
-                    int k = j;
-                    while (k < tam_tablero && flotaOponente[i][k] == 'X') {
-                        if (oponente[i][k] != 'H') break;
-                        k++;
-                    }
-                    if (k == j) continue; // solo una H aislada
-                    if (k == tam_tablero || flotaOponente[i][k] != 'X') {
-                        hundidos++;
-                        j = k; // saltar al final del barco
+    // Direcciones para las 8 posiciones adyacentes (horizontal, vertical, diagonal)
+    int dir[8][2] = {{-1,-1}, {-1,0}, {-1,1},
+                     {0,-1},          {0,1},
+                     {1,-1},  {1,0}, {1,1}};
+
+    for (int i = 0; i < tamTablero; i++) {
+        for (int j = 0; j < tamTablero; j++) {
+            // Si encontramos una parte de barco hundido no visitada
+            if (jug->Tablero_oponente[i][j] == 'H' && visitado[i][j] == 0) {
+                hundidos++; // Nuevo barco encontrado
+
+                // Usamos arrays para simular una cola (BFS)
+                int *cola_x = (int*)malloc(tamTablero * tamTablero * sizeof(int));
+                int *cola_y = (int*)malloc(tamTablero * tamTablero * sizeof(int));
+                int frente = 0, final = 0;
+
+                // Marcamos y añadimos la posición inicial
+                visitado[i][j] = 1;
+                cola_x[final] = i;
+                cola_y[final] = j;
+                final++;
+
+                while (frente < final) {
+                    int x = cola_x[frente];
+                    int y = cola_y[frente];
+                    frente++;
+
+                    // Exploramos las 8 direcciones posibles
+                    for (int d = 0; d < 8; d++) {
+                        int nx = x + dir[d][0];
+                        int ny = y + dir[d][1];
+
+                        // Verificamos límites y si es parte del mismo barco no visitado
+                        if (nx >= 0 && nx < tamTablero && ny >= 0 && ny < tamTablero &&
+                            jug->Tablero_oponente[nx][ny] == 'H' && visitado[nx][ny] == 0) {
+                            visitado[nx][ny] = 1;
+                            cola_x[final] = nx;
+                            cola_y[final] = ny;
+                            final++;
+                        }
                     }
                 }
+
+                free(cola_x);
+                free(cola_y);
             }
         }
     }
+
+    // Liberamos la matriz de visitados
+    for (int i = 0; i < tamTablero; i++) {
+        free(visitado[i]);
+    }
+    free(visitado);
 
     return hundidos;
 }
@@ -602,6 +644,7 @@ jugador *recuperarJugadores(int tamTableros, int nBarcosElegidos, int tamListaBa
   char *traerTableros;
   jugador *recuperados;
   FILE *fJuego;
+  int hundidosJug1, hundidosJug2;
 
   fJuego = fopen(GUARDAR_PARTIDA, "r");
   if(fJuego == NULL){
@@ -638,6 +681,12 @@ jugador *recuperarJugadores(int tamTableros, int nBarcosElegidos, int tamListaBa
     recuperarTableros(recuperados[i].Tablero_flota, traerTableros, tamTableros, fJuego);
     recuperarTableros(recuperados[i].Tablero_oponente, traerTableros, tamTableros, fJuego);
   }
+
+  hundidosJug2 = contar_hundidos_jugador(&recuperados[0], tamTableros);
+  hundidosJug1 = contar_hundidos_jugador(&recuperados[1], tamTableros);
+
+  recuperados[0].Num_Barcos = nBarcosElegidos - hundidosJug1;
+  recuperados[1].Num_Barcos = nBarcosElegidos - hundidosJug2;
 
   free(traerTableros);
   fclose(fJuego);
