@@ -1,66 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "configuracion.h"
-#include "disparo_Automatico.h"
+#include "disparoAutomatico.h"
+#include "interfaces.h"
 
+// Definición de estados según tus especificaciones
 
+#define VACIO '-'
+#define AGUA '*'
+#define TOCADO 'T'
+#define HUNDIDO 'H'
+#define BARCO 'X'  // Estado inicial de las partes de barco
 
-static void marcar_barco_hundido (jugador* jug, char id_barco, int tam_tablero);
+// Prototipos
+static void marcar_barco_hundido(jugador* jug, char id_barco, int tam_tablero);
 static int barco_hundido(jugador* defensor, char id_barco, int tam_tablero);
-int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int tam_tablero, int* tocado);
-static void gestionar_turnos (jugador *jugadores, int tam_tablero);
+static int contar_hundidos_jugador(jugador* jug, int tam_tablero);
+int comprobar_resultados_disparo(jugador* defensor, int fila, int columna, int tam_tablero, int* tocado);
+void cambiar_turnos(jugador* jug1, jugador* jug2);
 
-//Precondición: tener inicializados los tableros, el numero de barcos, y saber el disparo del jugador segun el turno
+
 //Cabecera: int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int tam_tablero, int* tocado)
+//Precondición: tener inicializados los tableros, el numero de barcos, y saber el disparo del jugador segun el turno
 //Postcondición: devolverá un numero evaluando donde reciba el disparo
 
-int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int tam_tablero, int* tocado) {
-    // Validar coordenadas
-    if (columna < 0 || columna >= tam_tablero || fila < 0 || fila >= tam_tablero) {
+int comprobar_resultados_disparo(jugador* defensor, int fila, int columna, int tam_tablero, int* tocado) {
+
+    // Validación de coordenadas
+    if (fila < 0 || fila >= tam_tablero || columna < 0 || columna >= tam_tablero) {
+        *tocado = 0;
         return -1; // Coordenadas inválidas
     }
 
-    // Verificar si ya se disparó aquí
-    if (defensor->Tablero_oponente[fila][columna] != AGUA) {
+    // Verificación de disparo repetido
+    char estado_actual = defensor->Tablero_oponente[fila][columna];
+    if (estado_actual != VACIO && estado_actual != AGUA) {
+        *tocado = 0;
         return -2; // Disparo repetido
     }
 
-    // Registrar el disparo
-    defensor->Tablero_oponente[fila][columna] = 1;
-
-    // Comprobar resultado
-    if (defensor->Tablero_flota[fila][columna] == AGUA) {
+    // Comprobar resultado del disparo
+    if (defensor->Tablero_flota[fila][columna] == VACIO || defensor->Tablero_flota[fila][columna] == AGUA) {
         defensor->Tablero_oponente[fila][columna] = AGUA;
-        if (defensor->Tablero_oponente[fila][columna] == AGUA){
-            defensor->Tablero_oponente[fila][columna] = '*';
-        }
         *tocado = 0;
-
         return 0; // Agua
     }
-    else if (defensor->Tablero_flota[fila][columna] == BARCO) {
+    else {
+        // Si es una parte del barco
+        char id_barco = defensor->Tablero_flota[fila][columna];
         defensor->Tablero_oponente[fila][columna] = TOCADO;
         *tocado = 1;
 
-        // Verificar si el barco está hundido
-        char id_barco = defensor->Tablero_flota[fila][columna];
-
-        // Buscar todas las partes del barco
         if (barco_hundido(defensor, id_barco, tam_tablero)) {
-            int hundidos_num;
-            marcar_barco_hundido(&defensor,id_barco,tam_tablero);
-            hundidos_num = contar_hundidos_jugador(&defensor, tamTablero)
+            marcar_barco_hundido(defensor, id_barco, tam_tablero);
 
-                // Verificar si todos los barcos están hundidos
-                if ( hundidos_num == defensor->Num_Barcos) {
-                    return 3; // Victoria
-                }
-
+            if (contar_hundidos_jugador(defensor, tam_tablero) == defensor->Num_Barcos) {
+                return 3; // Victoria
+            }
             return 2; // Barco hundido
         }
         return 1; // Barco tocado
     }
-        *tocado = 0;
-    return -1; // Error desconocido
 }
+
 
 // Cabecera : static int barco_hundido(jugador* defensor, char id_barco, int tam_tablero);
 // Precondicion: recorra la matriz observando si es tocado o hundido
@@ -69,28 +71,27 @@ int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int
 static int barco_hundido(jugador* defensor, char id_barco, int tam_tablero) {
     for (int i = 0; i < tam_tablero; i++) {
         for (int j = 0; j < tam_tablero; j++) {
-            if (defensor->Tablero_flota[i][j] == id_barco) {
-                char estado = defensor->Tablero_oponente[i][j];
-                if (estado != TOCADO && estado != HUNDIDO) {
-                    return 0; // Parte intacta encontrada
-                }
+            if (defensor->Tablero_flota[i][j] == id_barco &&
+                defensor->Tablero_oponente[i][j] != TOCADO &&
+                defensor->Tablero_oponente[i][j] != HUNDIDO) {
+                return 0;
             }
         }
     }
-    return 1; // Todas las partes tocadas/hundidas
+    return 1;
 }
 
 // Cabecera : static void marcar_barco_hundido (jugador* jug, char id_barco, int tam_tablero);
 // Precondicion: recibir la matriz del jugador que recibe disparos, y que el id_barco se encuentre "hundido" osea todas sus posiciones tocadas
 // Poscondicion: va a marcar todo ese barco como hundido
 
-static void marcar_barco_hundido (jugador* jug, char id_barco, int tam_tablero){
+static void marcar_barco_hundido(jugador* jug, char id_barco, int tam_tablero) {
     for (int i = 0; i < tam_tablero; i++) {
-            for (int j = 0; j < tam_tablero; j++) {
-                    if (defensor->Tablero_flota[i][j] == id_barco) {
-                        defensor->Tablero_oponente[i][j] = HUNDIDO;
-                    }
+        for (int j = 0; j < tam_tablero; j++) {
+            if (jug->Tablero_flota[i][j] == id_barco) {
+                jug->Tablero_oponente[i][j] = HUNDIDO;
             }
+        }
     }
 }
 
@@ -98,78 +99,95 @@ static void marcar_barco_hundido (jugador* jug, char id_barco, int tam_tablero){
 // Precondicion: recibir resultado disparo tras saber si es disparo automatico o manual y saber quien es el jugadir_actual
 // Poscondicion: segun el disparo y su resultado realizara las distintas funciones hasta que el juego acabe o el jugador quiera pausar la partida
 
-static void gestionar_turnos(jugador *jugadores, int tam_tablero) {
+void gestionar_turnos(jugador *jug1, jugador *jug2, int tam_tablero) {
 
-    int turno_actual = 0; // Índice del jugador actual
     int juego_terminado = 0;
-
-    // Variables necesarias para el disparo automatico
     int ultimo_fila = -1, ultimo_columna = -1;
     int direccion_fila = 0, direccion_columna = 0;
     int impactos = 0;
     int tocado = 0;
 
     while (!juego_terminado) {
-        jugador *atacante = &jugadores[turno_actual];
-        jugador *defensor = &jugadores[(turno_actual + 1) % MAX_JUGADORES];
 
-        printf("\n--- Turno de %s (Disparos: %d) ---\n", atacante->Nom_Jugador, atacante->Num_Disparos);
+            if (jug1.turno == 1) {
+                    jugador *atacante = jug1;
+                    jugador *defensor = jug2;
+            }
+            else if (jug2.turno == 1) {
+                    jugador *atacante = jug2;
+                    jugador *defensor = jug1;
+
+            }
+
+        printf("\n--- Turno de %s (Disparos: %d) ---\n",
+              atacante->Nom_Jugador, atacante->Num_Disparos);
 
         int fila, columna;
         int resultado;
 
         do {
-            // Realizar disparo según el tipo
             if (atacante->Tipo_Disparo == 'A') {
-                disparo_automatico(atacante->Tablero_oponente, &fila, &columna, &ultimo_fila, &ultimo_columna, &tocado, &direccion_fila, &direccion_columna, &impactos);
+                disparo_automatico(atacante->Tablero_oponente, &fila, &columna, &ultimo_fila, &ultimo_columna, &tocado, &direccion_fila, &direccion_columna, &impactos, tam_tablero);
                 printf("Disparo automático en: (%d, %d)\n", fila, columna);
             } else {
-                printf("\nTablero de Disparos:\n");
+                printf("\nTablero de Disparos:\n"); // enseñamos el tablero al oponente
                 imprimirTableroOponente(atacante->Tablero_oponente, tam_tablero);
-                disparo_manual(atacante, defensor, &fila, &columna);
+                disparo_manual(&fila, &columna);
             }
 
-            // Procesar resultado
             resultado = comprobar_resultados_disparo(defensor, fila, columna, tam_tablero, &tocado);
-            atacante->Num_Disparos++; // Contar el disparo
 
-            // Manejar resultado
+            if (resultado >= 0) {
+                atacante->Num_Disparos++;
+            }
+
             switch(resultado) {
-                case 0: // Agua
-                    atacante->Tablero_oponente[fila][columna] = AGUA;
-                    printf("¡Agua! Turno terminado.\n");
+                case 0:
+                    printf("¡Agua!\n");
                     break;
-
-                case 1: // Tocado
-                    atacante->Tablero_oponente[fila][columna] = TOCADO;
-                    printf("¡Tocado! Continúa %s.\n", atacante->Nom_Jugador);
+                case 1:
+                    printf("¡Tocado!\n");
                     break;
-
-                case 2: // Hundido
-                    atacante->Tablero_oponente[fila][columna] = HUNDIDO;
-                    printf("¡Hundido! %s sigue disparando.\n", atacante->Nom_Jugador);
+                case 2:
+                    printf("¡Hundido!\n");
                     break;
-
-                case 3: // Victoria
-                    atacante->Tablero_oponente[fila][columna] = HUNDIDO;
-                    printf("¡%s gana la partida!\n", atacante->Nom_Jugador);
+                case 3:
+                    printf("¡Victoria de %s!\n", atacante->Nom_Jugador);
                     atacante->Ganador_Ronda = GANADOR;
                     defensor->Ganador_Ronda = PERDEDOR;
                     juego_terminado = 1;
                     break;
-
-                case -1: case -2: // Errores
-                    atacante->Num_Disparos--; // No contar disparos inválidos
+                case -1:
+                    printf("Error: Coordenadas fuera del tablero\n");
+                    break;
+                case -2:
+                    printf("Error: Ya habías disparado ahí\n");
                     break;
             }
 
-        } while ((resultado == 1 || resultado == 2) && !juego_terminado);
+            imprimirTableroOponente(atacante->Tablero_oponente, tam_tablero);
+            guardarPartida(barcosElegidos,jugadores, tam_lista, numBarcos, tam_tablero);
 
-        // Cambiar turno si fue agua (resultado 0)
+        } while ((resultado < 0 || resultado == 1 || resultado == 2) && !juego_terminado);
+
         if (resultado == 0) {
-            turno_actual = (turno_actual + 1) % MAX_JUGADORES;
+            cambiar_turnos(atacante,defensor);
         }
     }
 }
 
+// Cabecera : static void cambiar_turnos(jugador* jug1, jugador* jug2
+// Precondicion: recibir resultado sea igual a 0
+// Poscondicion: intercambia los turnos segun el jugador que este jugando
 
+static void cambiar_turnos(jugador* jug1, jugador* jug2){
+
+    if (jug1.turno == 1) {
+        jug1.turno = 0;
+        jug2.turno = 1;
+    }
+    else {
+        jug1.turno = 1;
+        jug2.turno = 0;
+    }
+}
