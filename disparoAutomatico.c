@@ -48,7 +48,7 @@ void disparo_automatico(char **tablero_oponente, int tam_tablero, int *fila, int
     do {
         *fila = rand() % tam_tablero;
         *columna = rand() % tam_tablero;
-    } while (tablero_oponente[*fila][*columna] != ' ');
+    } while (tablero_oponente[*fila][*columna] != '-');
 }
 
 }
