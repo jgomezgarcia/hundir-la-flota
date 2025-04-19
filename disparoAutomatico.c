@@ -4,7 +4,7 @@
 void disparo_automatico(char **tablero_oponente, int tam_tablero, int *fila, int *columna, int *ultimo_fila, int *ultimo_columna, int *tocado, int *direccion_fila, int *direccion_columna, int *impactos) {
       srand(time(NULL));
 
-    if (*tocado = 1 ) {
+    if (*tocado == 1 ) {
         if (*direccion_fila == 0 && *direccion_columna == 0) { // Si no hay dirección definida
             int direcciones[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
             for (int i = 0; i < 8; i++) {
