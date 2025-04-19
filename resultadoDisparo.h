@@ -1,14 +1,7 @@
-#ifndef RESULTADOS_H
-#define RESULTADOS_H
+#ifndef __RESULTADODISPARO__H__
+#define __RESULTADODISPARO__H__
 
+typedef enum {TOCADO, HUNDIDO, AGUA} resultado;
+resultado resultadoDisparo(int, int, int, char **, char **);
 
-#include "configuracion.h"
-#include "disparoAutomatico.h"
-#include "interfaces.h"
-
-int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int tam_tablero, int* tocado);
-void gestionar_turnos (jugador *jug1,jugador *jug2, int tam_tablero, barcos *barcosElegidos, int tam_lista, int numBarcos);
-
-
-#endif // RESULTADOS_H
-
+#endif // __RESULTADODISPARO__H__
