@@ -32,13 +32,13 @@ int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int
 
     // Verificación de disparo repetido
     char estado_actual = defensor->Tablero_oponente[*fila][*columna];
-    if (estado_actual != VACIO && estado_actual != AGUA) {
+    if (estado_actual != VACIO) {
         *tocado = 0;
         return -2; // Disparo repetido
     }
 
     // Comprobar resultado del disparo
-    if (defensor->Tablero_flota[*fila][*columna] == VACIO || defensor->Tablero_flota[*fila][*columna] == AGUA) {
+    if (defensor->Tablero_flota[*fila][*columna] == VACIO) {
         defensor->Tablero_oponente[*fila][*columna] = AGUA;
         *tocado = 0;
         return 0; // Agua
@@ -51,8 +51,6 @@ int comprobar_resultados_disparo(jugador* defensor, int* fila, int* columna, int
 
         if (barco_hundido(defensor, id_barco, tam_tablero)) {
             marcar_barco_hundido(defensor, id_barco, tam_tablero);
-
-            //contarBarcosHundidos(char **flotaOponente, char **oponente, int tam_tablero);
 
             if ((contar_hundidos_jugador(defensor, tam_tablero)) == defensor->Num_Barcos) {
                 return 3; // Victoria
@@ -85,10 +83,18 @@ static int barco_hundido(jugador* defensor, char id_barco, int tam_tablero) {
 // Precondicion: recibir la matriz del jugador que recibe disparos, y que el id_barco se encuentre "hundido" osea todas sus posiciones tocadas
 // Poscondicion: va a marcar todo ese barco como hundido
 
+
 static void marcar_barco_hundido(jugador* jug, char id_barco, int tam_tablero) {
+    // Primero verificar que el barco realmente esté hundido
+    if (!barco_hundido(jug, id_barco, tam_tablero)) {
+        return; // No está hundido, salir sin hacer cambios
+    }
+
+    // Recorrer el tablero buscando solo las partes de este barco específico
     for (int i = 0; i < tam_tablero; i++) {
         for (int j = 0; j < tam_tablero; j++) {
-            if (jug->Tablero_flota[i][j] == id_barco) {
+            // Solo cambiar las casillas que pertenecen a este barco específico
+            if (jug->Tablero_flota[i][j] == id_barco && jug->Tablero_oponente[i][j] == TOCADO) {
                 jug->Tablero_oponente[i][j] = HUNDIDO;
             }
         }
@@ -148,12 +154,15 @@ void gestionar_turnos(jugador *jug1, jugador *jug2, int tam_tablero, barcos *bar
                 case 0:
                     printf("¡Agua!\n");
                     break;
+
                 case 1:
                     printf("¡Tocado!\n");
                     break;
+
                 case 2:
                     printf("¡Hundido!\n");
                     break;
+
                 case 3:
                     printf("¡Victoria de %s!\n", atacante->Nom_Jugador);
                     atacante->Ganador_Ronda = GANADOR;
@@ -168,12 +177,14 @@ void gestionar_turnos(jugador *jug1, jugador *jug2, int tam_tablero, barcos *bar
                     break;
             }
 
+            if (resultado >= 0) {
+                guardarPartida(barcosElegidos, jug1, tam_lista, numBarcos, tam_tablero);
+                guardarPartida(barcosElegidos, jug2, tam_lista, numBarcos, tam_tablero);
+            }
+
             imprimirTableroOponente(atacante->Tablero_oponente, tam_tablero);
 
-            guardarPartida(barcosElegidos, atacante, tam_lista, numBarcos, tam_tablero);
-            guardarPartida(barcosElegidos, defensor, tam_lista, numBarcos, tam_tablero);
-
-        } while ((resultado < 0 || resultado == 1 || resultado == 2) && juego_terminado==0);
+        } while ((resultado < 0 || resultado == 1 || resultado == 2) && juego_terminado == 0);
 
             if (resultado == 0 && juego_terminado==0) {
             // Cambiar turnos
