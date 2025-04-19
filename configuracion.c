@@ -22,7 +22,6 @@ static int validarNumBarcos(int , int);
 static void volcarEnFicheroTableros(char **, char **, int, FILE *);
 static void liberarTableros(int , char **, char **);
 static void recuperarTableros(char **, char *, int, FILE *);
-static int contar_hundidos_jugador(jugador *, int);
 
 
 //Precondición: recibir una cadena ya inicializada y recibe por referencia la estructura barco
@@ -201,7 +200,7 @@ static void recuperarTableros(char **tablero, char *buffer, int tamTableros, FIL
 }
 
 // Función para contar barcos hundidos de un jugador
-static int contar_hundidos_jugador(jugador *jug, int tamTablero) {
+int contar_hundidos_jugador(jugador *jug, int tamTablero) {
     if (jug == NULL || jug->Tablero_oponente == NULL) return 0;
 
     // Creamos matriz de visitados usando enteros (0 = no visitado, 1 = visitado)
@@ -445,7 +444,7 @@ jugador *configurarJugador(int tam_tablero, int nBarcos){
 //Precondición: recibir  ya inicializado el tablero y el tamaño de tableros que debe ser mayor de 3
 //Poscondición: imprime tablero flota
 void imprimirTableroFlota(char **tableroFlota, int tam_tableros){
-  printf("TABLERO FLOTA\n");
+  printf("TABLERO FLOTA");
     printf("\n   ");
     for (int j = 0; j < tam_tableros; j++) {
         printf("%2d ", j); // Encabezado de columnas

@@ -1,4 +1,4 @@
-#include "disparo_automatico.h"
+#include "disparoAutomatico.h"
 #include <time.h>
 
 void disparo_automatico(char **tablero_oponente, int tam_tablero, int *fila, int *columna, int *ultimo_fila, int *ultimo_columna, int *tocado, int *direccion_fila, int *direccion_columna, int *impactos) {
@@ -50,13 +50,5 @@ void disparo_automatico(char **tablero_oponente, int tam_tablero, int *fila, int
         *columna = rand() % tam_tablero;
     } while (tablero_oponente[*fila][*columna] != '-');
 }
-
-}
-
-void disparo_manual(int *fila,int *columa){
-    printf("Introduce la fila y la columna del disparo: ");
-    scanf("%d %d", fila, columna);
-    //enviar el disparo para que lo compruebe el otro modulo
-    }
 
 

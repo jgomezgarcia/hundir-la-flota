@@ -35,5 +35,6 @@ barcos * recuperarBarcos(int *, int *, int *);
 jugador *recuperarJugadores(int , int , int );
 void eliminarConfiguracion(barcos *, jugador *, int);
 int contarBarcosHundidos(char **flotaOponente, char **oponente, int tam_tablero);
+int contar_hundidos_jugador(jugador *, int);
 
 #endif // __CONFIGURACION__H__

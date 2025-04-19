@@ -1,0 +1,72 @@
+# depslib dependency file v1.0
+1745030638 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\colocarflota.c
+	<stdio.h>
+	<stdlib.h>
+	"configuracion.h"
+	"colocarFlota.h"
+	"interfaces.h"
+	<time.h>
+
+1745064350 c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\configuracion.h
+
+1745030638 c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\colocarflota.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"configuracion.h"
+
+1745030638 c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\interfaces.h
+	"configuracion.h"
+
+1745064351 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\configuracion.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	<windows.h>
+	"configuracion.h"
+
+1745030638 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\main.c
+	<stdio.h>
+	<stdlib.h>
+	"configuracion.h"
+	"interfaces.h"
+
+1745030638 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\pospartida.c
+
+1745064981 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\disparoautomatico.c
+	"disparoAutomatico.h"
+	<time.h>
+
+1745065561 c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\disparoautomatico.h
+	"configuracion.h"
+	"resultadoDisparo.h"
+	<stdlib.h>
+	<time.h>
+
+1745063897 c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\resultadodisparo.h
+	"configuracion.h"
+	"disparoAutomatico.h"
+	"interfaces.h"
+
+1745065677 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\resultadodisparo.c
+	<stdio.h>
+	<stdlib.h>
+	"configuracion.h"
+	"disparoAutomatico.h"
+	"interfaces.h"
+
+1745064670 source:c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\interfaces.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"interfaces.h"
+	"configuracion.h"
+	"colocarFlota.h"
+	"posPartida.h"
+	"resultadoDisparo.h"
+	"disparoAutomatico.h"
+
+1745030638 c:\mac\home\desktop\uca\proyecto mp\hundir-la-flota-desarrollo\pospartida.h
+
