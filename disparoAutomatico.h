@@ -2,7 +2,7 @@
 #define DISPARO_AUTOMATICO_H_INCLUDED
 
 #include "configuracion.h"
-#include "jugador.h"
+#include "resultado.h"
 #include <stdlib.h>
 #include <time.h>
 
