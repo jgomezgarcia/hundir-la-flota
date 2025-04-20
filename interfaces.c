@@ -239,23 +239,17 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                   } else {
 
                     //Módulo de Dani
-                          static int ultimo_fila = -1, ultimo_columna = -1;
-    static int tocado = 0, direccion_fila = 0, direccion_columna = 0, impactos = 0;
+                    static int ultimo_fila = -1, ultimo_columna = -1, tocado = 0, direccion_fila = 0, direccion_columna = 0, impactos = 0;
 
-    disparo_automatico((*jugadores)[indexJugadorTurno].Tablero_oponente, tam_tablero,
-                       &filaDisparo, &colDisparo, &ultimo_fila, &ultimo_columna,
-                       &tocado, &direccion_fila, &direccion_columna, &impactos);
+                    disparo_automatico((*jugadores)[indexJugadorTurno].Tablero_oponente, tam_tablero, &filaDisparo, &colDisparo, &ultimo_fila, &ultimo_columna, &tocado, &direccion_fila, &direccion_columna, &impactos);
+                    printf("Disparo automatico realizado en [%d][%d]\n", filaDisparo, colDisparo);
+                    resultadoDisparoPartida = resultadoDisparo(filaDisparo, colDisparo, tam_tablero, (*jugadores)[!indexJugadorTurno].Tablero_flota, (*jugadores)[indexJugadorTurno].Tablero_oponente);
+                    (*jugadores)[indexJugadorTurno].Num_Disparos += 1;
+                    imprimirTableroOponente((*jugadores)[indexJugadorTurno].Tablero_oponente, tam_tablero);
+    
 
-    printf("Disparo automatico realizado en [%d][%d]\n", filaDisparo, colDisparo);
-    resultadoDisparoPartida = resultadoDisparo(filaDisparo, colDisparo, tam_tablero,
-                                               (*jugadores)[!indexJugadorTurno].Tablero_flota,
-                                               (*jugadores)[indexJugadorTurno].Tablero_oponente);
-
-    (*jugadores)[indexJugadorTurno].Num_Disparos += 1;
-    imprimirTableroOponente((*jugadores)[indexJugadorTurno].Tablero_oponente, tam_tablero);
-
-    switch (resultadoDisparoPartida) {
-        case AGUA:
+            switch (resultadoDisparoPartida) {
+            case AGUA:
             printf("Disparo automatico cayó en agua. Pierde su turno.\n");
             (*jugadores)[!indexJugadorTurno].turno = 1;
             (*jugadores)[indexJugadorTurno].turno = 0;
