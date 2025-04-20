@@ -101,6 +101,8 @@ void menuConfiguracion(jugador **jugadores, barcos **barcosElegidos, int *tam_ta
 
         switch (opcion) {
             case 1:
+                mostrarEncabezado("CONFIGURACION");
+                system("cls");
                 *barcosElegidos = barcosParaJugar(numBarcos, tam_lista, tam_tablero);
                 *jugadores = configurarJugador(*tam_tablero, *numBarcos);
                 Sleep(1000);
@@ -170,7 +172,6 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     colocarBarcos(&(*jugadores)[i], *barcosElegidos, numBarcos, tam_tablero);
 
                     printf("\nPresiona Enter para continuar...");
-                    limpiarBuffer();
                     getchar();
                 }
                 printf("\n¡Todos los barcos han sido colocados!\n");
@@ -232,7 +233,6 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     }
                     printf("\nPresiona Enter para continuar...");
                     limpiarBuffer();
-                    getchar();
                     system("cls");
 
 
@@ -246,51 +246,49 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     resultadoDisparoPartida = resultadoDisparo(filaDisparo, colDisparo, tam_tablero, (*jugadores)[!indexJugadorTurno].Tablero_flota, (*jugadores)[indexJugadorTurno].Tablero_oponente);
                     (*jugadores)[indexJugadorTurno].Num_Disparos += 1;
                     imprimirTableroOponente((*jugadores)[indexJugadorTurno].Tablero_oponente, tam_tablero);
-    
 
-            switch (resultadoDisparoPartida) {
-            case AGUA:
-            printf("Disparo automatico cayó en agua. Pierde su turno.\n");
-            (*jugadores)[!indexJugadorTurno].turno = 1;
-            (*jugadores)[indexJugadorTurno].turno = 0;
-            tocado = 0;
-            direccion_fila = 0;
-            direccion_columna = 0;
-            impactos = 0;
-            printf("\nPresiona Enter para continuar...");
-            limpiarBuffer();
-            getchar();
-            break;
 
-        case TOCADO:
-            printf("Disparo automatico ha tocado un barco. Continua.\n");
-            tocado = 1;
-            ultimo_fila = filaDisparo;
-            ultimo_columna = colDisparo;
-            printf("\nPresiona Enter para continuar...");
-            limpiarBuffer();
-            getchar();
-            break;
+                    switch (resultadoDisparoPartida) {
+                    case AGUA:
+                    printf("Disparo automatico fue agua. Pierde su turno.\n");
+                    (*jugadores)[!indexJugadorTurno].turno = 1;
+                    (*jugadores)[indexJugadorTurno].turno = 0;
+                    tocado = 0;
+                    direccion_fila = 0;
+                    direccion_columna = 0;
+                    impactos = 0;
+                    printf("\nPresiona Enter para continuar...");
+                    limpiarBuffer();
+                    break;
 
-        case HUNDIDO:
-            printf("Disparo automatico ha hundido un barco. Continua.\n");
-            (*jugadores)[!indexJugadorTurno].Num_Barcos -= 1;
-            tocado = 0;
-            direccion_fila = 0;
-            direccion_columna = 0;
-            impactos = 0;
-            printf("\nPresiona Enter para continuar...");
-            limpiarBuffer();
-            getchar();
-            break;
-    }
+                    case TOCADO:
+                    printf("Disparo automatico ha tocado un barco. Continua.\n");
+                    tocado = 1;
+                    ultimo_fila = filaDisparo;
+                    ultimo_columna = colDisparo;
+                    printf("\nPresiona Enter para continuar...");
+                    limpiarBuffer();
+                    break;
 
-    system("cls");
-}
+                    case HUNDIDO:
+                    printf("Disparo automatico ha hundido un barco. Continua.\n");
+                    (*jugadores)[!indexJugadorTurno].Num_Barcos -= 1;
+                    tocado = 0;
+                    direccion_fila = 0;
+                    direccion_columna = 0;
+                    impactos = 0;
+                    printf("\nPresiona Enter para continuar...");
+                    limpiarBuffer();
+                    break;
+                    }
 
-                  }
+                    system("cls");
+                    }
+
+                }
 
                   if((*jugadores)[!indexJugadorTurno].Num_Barcos == 0){
+                    mostrarEncabezado("HAY UN GANADOR");
                     printf("Enhorabuena %s, has ganado la partida. \n", (*jugadores)[indexJugadorTurno].Nom_Jugador);
                     printf("\nPresiona Enter para continuar...");
                     limpiarBuffer();
@@ -304,7 +302,6 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
 
 
                 return;
-            }
             case 2:
                 for(int i=0; i<MAX_JUGADORES; i++){
                     inicializarTableros((*jugadores)[i].Tablero_flota, (*jugadores)[i].Tablero_oponente, tam_tablero);
