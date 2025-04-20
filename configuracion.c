@@ -425,7 +425,7 @@ jugador *configurarJugador(int tam_tablero, int nBarcos){
       printf("Que jugador comenzará la partida, introduzca su número, (1/2): ");
       scanf("%d", &turno);
       printf("\n");
-      jugadorConfigurar[turno-1].turno = 1; //Aquel jugador elegido se el asigna turno 1
+      jugadorConfigurar[turno-1].turno = 1;//Aquel jugador elegido se el asigna turno 1
     }while(turno > 2 || turno <= 0);
   } else {
     printf("Turno asignado automáticamente... \n");
@@ -639,11 +639,14 @@ barcos * recuperarBarcos(int *tamTableros, int *nBarcosElegidos, int *tamListaBa
 }
 
 jugador *recuperarJugadores(int tamTableros, int nBarcosElegidos, int tamListaBarcosElegidos){
+  srand(time(NULL));
   char infoJugadores[100];
   char *traerTableros;
   jugador *recuperados;
   FILE *fJuego;
-  int hundidosJug1, hundidosJug2;
+  int hundidosJug1, hundidosJug2, turno;
+
+  turno = rand() % 2;
 
   fJuego = fopen(GUARDAR_PARTIDA, "r");
   if(fJuego == NULL){
@@ -680,6 +683,9 @@ jugador *recuperarJugadores(int tamTableros, int nBarcosElegidos, int tamListaBa
     recuperarTableros(recuperados[i].Tablero_flota, traerTableros, tamTableros, fJuego);
     recuperarTableros(recuperados[i].Tablero_oponente, traerTableros, tamTableros, fJuego);
   }
+
+  recuperados[turno].turno = 1;
+  recuperados[!turno].turno = 0;
 
   hundidosJug2 = contar_hundidos_jugador(&recuperados[0], tamTableros);
   hundidosJug1 = contar_hundidos_jugador(&recuperados[1], tamTableros);

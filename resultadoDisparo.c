@@ -1,15 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "resultadoDisparo.h"
 
-typedef enum {TOCADO, HUNDIDO, AGUA} resultado;
+static int buscarBarco(int, int, int, char **, char **, int **, int **, int *);
 
-static int buscarBarco(int fila, int columna, int tam, char flota[10][10], char oponente[10][10], int **visitado, int **coordenadas, int *contador);
-
+// Función auxiliar para recorrer el barco completo (DFS)
 static int buscarBarco(int fila, int columna, int tam, char **flota, char **oponente, int **visitado, int **coordenadas, int *contador) {
-    int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};  //Distintas combinaciones para desplazarnos alrededor del disparo
-    int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};  //Distintas combinaciones para desplazarnos alrededor del disparo
+    int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
 
     visitado[fila][columna] = 1;
     coordenadas[*contador][0] = fila;
@@ -18,7 +16,7 @@ static int buscarBarco(int fila, int columna, int tam, char **flota, char **opon
 
     int hundido = 1;
 
-    for (int k = 0; k < 8; k++) {  //
+    for (int k = 0; k < 8; k++) {
         int nf = fila + dx[k];
         int nc = columna + dy[k];
 
@@ -62,7 +60,7 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
                 tableroOponente[x][y] = 'H';
             }
 
-            // Liberamos memoria
+            // Liberar memoria antes de retornar
             for (int i = 0; i < tam_tablero; i++) free(auxVisitado[i]);
             free(auxVisitado);
             for (int i = 0; i < tam_tablero * tam_tablero; i++) free(coordenadas[i]);
@@ -70,7 +68,7 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
 
             return HUNDIDO;
         } else {
-            // Liberamos memoria
+            // Liberar memoria antes de retornar
             for (int i = 0; i < tam_tablero; i++) free(auxVisitado[i]);
             free(auxVisitado);
             for (int i = 0; i < tam_tablero * tam_tablero; i++) free(coordenadas[i]);
@@ -81,7 +79,7 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
     } else {
         tableroOponente[fila][columna] = 'A';
 
-        // Liberaramos memoria
+        // Liberar memoria antes de retornar
         for (int i = 0; i < tam_tablero; i++) free(auxVisitado[i]);
         free(auxVisitado);
         for (int i = 0; i < tam_tablero * tam_tablero; i++) free(coordenadas[i]);
@@ -90,3 +88,4 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
         return AGUA;
     }
 }
+
