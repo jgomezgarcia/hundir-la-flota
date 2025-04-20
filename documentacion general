@@ -1,1 +1,49 @@
+// descripcion funcional: describir de forma breve y precisa, el objetivo del programa. Ademas sus funcionalidades claves del juego en este caso. 
+("nose si va incluido en otra parte, indicar la modularidad de forma genérica).
 
+Hundir la flota es un juego de estrategia para dos jugadores. Cada uno coloca en secreto sus barcos en un tablero. Por turnos, intentan adivinar las posiciones del rival lanzando disparos (coordenadas).
+El objetivo es hundir todos los barcos del oponente antes de que él hunda los tuyos, ganará quien destruya primero toda la flota enemiga.
+
+¡Perfecto! A partir de la imagen que compartiste, aquí tienes un **desarrollo detallado** de las **restricciones del problema** agrupadas en dos grandes categorías: **código** y **funcionalidad**.
+
+---
+
+**Restricciones del problema**
+
+---
+
+ Respecto al **código**
+
+1. **No usar variables globales**  
+   - El uso de variables globales dificulta la depuración y el mantenimiento del código.  
+   - Toda la información debe manejarse mediante parámetros, estructuras o clases, garantizando encapsulamiento.
+
+2. **Alta cohesión**  
+   - Cada módulo o función debe realizar una única tarea claramente definida.  
+   - Esto facilita el testeo, la reutilización y el entendimiento del sistema.
+
+3. **Mínimo acoplamiento**  
+   - Los módulos o clases deben depender lo menos posible entre sí.  
+   - Cambios en una parte del sistema no deben afectar al resto, lo que promueve flexibilidad y escalabilidad.
+
+---
+
+Respecto a la **funcionalidad**
+
+1. **Colocar correctamente los barcos**  
+   - El sistema debe verificar que los barcos no se solapen ni se salgan del tablero.  
+   - Deben respetarse las reglas del juego: orientación válida y longitud específica para cada barco.
+
+2. **Dimensiones correctas para el tablero**  
+   - El tablero debe ser de dimensiones válidas (típicamente 10×10).  
+   - Cualquier intento de colocar barcos fuera de los límites debe ser gestionado correctamente por el sistema.
+
+3. **Algoritmo de disparo automático**  
+   - Se debe implementar un algoritmo que simule disparos automáticos, ya sea aleatorio o con lógica estratégica.  
+   - Este sistema debe evitar repetir disparos y registrar adecuadamente los resultados (agua, tocado, hundido).
+
+---
+
+// Documentación que describa cómo se descompone el problema en distintos subproblemas y los módulos asociados a cada uno de ellos. 
+
+Para el juego hundir la flota hemos hecho la siguiente descomposicion para realizar el desarrollo: 
