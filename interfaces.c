@@ -13,10 +13,13 @@ void limpiarBuffer() {
     while (getchar() != '\n');
 }
 
+//Función para preguntar si quiere salir de la partida
+static void preguntaSalir(int *opcion){
+    printf("¿Quieres salir de la partida? (No=0/Si=1): \n");
+    *opcion = obtenerOpcion(0,1);
+}
+
 // Función para mostrar el encabezado de un menú
-// Función para mostrar el encabezado de un menú con arte ASCII
-// Función para mostrar el encabezado de un menú con arte ASCII pirata
-// Función para mostrar el encabezado de un menú con arte ASCII pirata
 static void mostrarEncabezado(const char *titulo) {
     system("cls");
     // Mostrar el título recibido exactamente igual
@@ -26,7 +29,7 @@ static void mostrarEncabezado(const char *titulo) {
 }
 
 // Función para obtener una opción válida del usuario
-static int obtenerOpcion(int min, int max) {
+int obtenerOpcion(int min, int max) {
     int opcion;
     int valido = 0;
 
@@ -55,7 +58,7 @@ static int encontrarJugadorTurno(jugador **jugadores){
   return -1;
 }
 
-void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista) {
+void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista, int colocados) {
     while (1) {  // Bucle infinito para mantener el programa activo
         mostrarEncabezado("BIENVENIDO A HUNDIR LA FLOTA");
 
@@ -76,7 +79,7 @@ void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tabler
                     printf("\nDebes configurar la partida primero!\n");
                     Sleep(1000);
                 } else {
-                    menuPartida(jugadores, barcosElegidos, *tam_tablero, *numBarcos, *tam_lista);
+                    menuPartida(jugadores, barcosElegidos, *tam_tablero, *numBarcos, *tam_lista, &colocados);
                 }
                 break;
             case 3:
@@ -153,7 +156,7 @@ void menuConfiguracion(jugador **jugadores, barcos **barcosElegidos, int *tam_ta
     }
 }
 
-void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista) {
+void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista, int *colocados) {
     while (1) {
         mostrarEncabezado("PARTIDA");
 
@@ -164,13 +167,19 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
         Sleep(500);
 
         int op = obtenerOpcion(1, 3);
-        int filaDisparo, colDisparo, terminado = 0, rondaExtra=0, indexJugadorTurno;
+        int filaDisparo, colDisparo, terminado = 0, rondaExtra=0, salir=0, indexJugadorTurno;
         resultado resultadoDisparoPartida;
 
         switch (op) {
             case 1: {
                 // Colocación de barcos para ambos jugadores
-                for (int i = 0; i < MAX_JUGADORES; i++) {
+                if (*colocados == 1){
+                    printf("\n\nLos barcos ya estaban colocados.\n");
+                    printf("\nPresiona Enter para continuar...");
+                    getchar();
+                }
+                while(!*colocados){
+                    for (int i = 0; i < MAX_JUGADORES; i++) {
                     system("cls");
                     printf("=== COLOCANDO BARCOS PARA %s ===\n\n", (*jugadores)[i].Nom_Jugador);
                     colocarBarcos(&(*jugadores)[i], *barcosElegidos, numBarcos, tam_tablero);
@@ -178,10 +187,12 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     printf("\nPresiona Enter para continuar...");
                     getchar();
                 }
+                *colocados = 1;
                 printf("\n¡Todos los barcos han sido colocados!\n");
                 printf("Preparados para comenzar la batalla...\n");
                 Sleep(500);
                 system("cls");
+                }
 
                 do{
                     mostrarEncabezado("¡ACABA CON EL ENEMIGO!");
@@ -235,6 +246,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                         (*jugadores)[!indexJugadorTurno].Num_Barcos -= 1;
                       break;
                     }
+                    preguntaSalir(&salir);
                     printf("\nPresiona Enter para continuar...");
                     limpiarBuffer();
                     system("cls");
@@ -289,7 +301,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     limpiarBuffer();
                     break;
                     }
-
+                    preguntaSalir(&salir);
                     system("cls");
                     }
                     if ((*jugadores)[!indexJugadorTurno].Num_Barcos == 0 && rondaExtra == 0) {
@@ -317,7 +329,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                         limpiarBuffer();
                 }
 
-            }while(!terminado);
+            }while(!terminado && !salir);
 
                 }
 

@@ -3,9 +3,10 @@
 
 #include "configuracion.h"
 
-void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista);
+void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista, int colocados);
 void menuConfiguracion(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista);
-void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista);
+void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista, int *colocados);
 void limpiarBuffer();
+int obtenerOpcion(int, int);
 
 #endif // __INTERFACES_H__
