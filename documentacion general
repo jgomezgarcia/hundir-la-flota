@@ -54,6 +54,9 @@ los tipos de barcos en un fichero se encargará de colocar estos en un tablero (
 aleatoria, sino con cienta lógica y se asociara con el modulo "resultadoDisparo", donde segun el disparo que reciba del jugador devolvera un valor a la interfaz, y por
 último pero no menos importante un último modulo "pospartida" que imprimira toda las estadisticas producidas a lo largo de la partida.
 
+En esta sección se describe con detalle las ventajas que ofrece el sistema a los usuarios y cómo se pueden obtener mediante su uso. 
+Debe describir, de una manera más completa y formal, el uso del sistema, así como las situaciones de error y los informes generados.
+
 
 Proyecto Principal  
 ├── Configuración       # Módulo: Configuracion basica del juego
