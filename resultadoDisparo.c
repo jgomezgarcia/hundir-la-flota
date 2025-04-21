@@ -5,6 +5,9 @@
 static int buscarBarco(int, int, int, char **, char **, int **, int **, int *);
 
 // Función auxiliar para recorrer el barco completo (DFS)
+// Precondición: Recibe la fila y columna para buscar donde esta el barco para evaluarlo
+// Postcondición: Devuelve un valor (1 si el barco se encuentra hundido), (0 si el barco no se encuentra totalmente hundido)
+
 static int buscarBarco(int fila, int columna, int tam, char **flota, char **oponente, int **visitado, int **coordenadas, int *contador) {
     int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -34,6 +37,9 @@ static int buscarBarco(int fila, int columna, int tam, char **flota, char **opon
 
     return hundido;
 }
+
+// Precondición: Recibir el disparo según la estructura guardada de cada jugador ( disparo automatico o manual) . 
+// Postcondición: Devuelve un valor del tipo enumerado de resultado, segun el resultado del disparo
 
 resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tableroFlota, char **tableroOponente) {
     // Reservamos matriz de visitado
@@ -112,6 +118,8 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
     }
 }
 
+// Precondición: Recibe la estructura jugador, y que el "resultado" haya sido o bien AGUA o REPETIDO
+// Postcondición: Intercambia el turno de los jugadores
 
 void cambiarTurno(jugador *jugadores, int jugadorTurno){
   jugadores[!jugadorTurno].turno = 1;
