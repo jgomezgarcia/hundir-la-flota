@@ -58,7 +58,7 @@ static int encontrarJugadorTurno(jugador **jugadores){
   return -1;
 }
 
-void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista, int colocados) {
+void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tablero, int *numBarcos, int *tam_lista) {
     while (1) {  // Bucle infinito para mantener el programa activo
         mostrarEncabezado("BIENVENIDO A HUNDIR LA FLOTA");
 
@@ -79,7 +79,7 @@ void menuPrincipal(jugador **jugadores, barcos **barcosElegidos, int *tam_tabler
                     printf("\nDebes configurar la partida primero!\n");
                     Sleep(1000);
                 } else {
-                    menuPartida(jugadores, barcosElegidos, *tam_tablero, *numBarcos, *tam_lista, &colocados);
+                    menuPartida(jugadores, barcosElegidos, *tam_tablero, *numBarcos, *tam_lista);
                 }
                 break;
             case 3:
@@ -156,30 +156,37 @@ void menuConfiguracion(jugador **jugadores, barcos **barcosElegidos, int *tam_ta
     }
 }
 
-void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista, int *colocados) {
+void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, int numBarcos, int tam_lista) {
     while (1) {
         mostrarEncabezado("PARTIDA");
 
         printf("Opciones:\n\n");
         printf("1. Jugar Partida\n");
         printf("2. Reiniciar Partida\n");
-        printf("3. Volver\n\n");
+        printf("3. Resumen de partida\n");
+        printf("4. Volver\n\n");
         Sleep(500);
 
         int op = obtenerOpcion(1, 3);
-        int filaDisparo, colDisparo, terminado = 0, rondaExtra=0, salir=0, indexJugadorTurno;
+        int filaDisparo, colDisparo, terminado = 0, rondaExtra=0, salir=0, colocados, indexJugadorTurno;
         resultado resultadoDisparoPartida;
 
         switch (op) {
             case 1: {
                 // Colocación de barcos para ambos jugadores
-                if (*colocados == 1){
+                system("cls");
+                mostrarEncabezado("COLOCACION DE BARCOS");
+                printf("¿Quieres colocar los barcos o seguir con lo que hay cargado?(0:Colocar/1:Seguir)\n");
+                colocados=obtenerOpcion(0,1);
+                if (colocados == 1){
                     printf("\n\nLos barcos ya estaban colocados.\n");
                     printf("\nPresiona Enter para continuar...");
                     getchar();
                 }
-                while(!*colocados){
+                while(!colocados){
                     for (int i = 0; i < MAX_JUGADORES; i++) {
+                    inicializarTableros((*jugadores)[i].Tablero_flota, (*jugadores)[i].Tablero_oponente, tam_tablero);
+
                     system("cls");
                     printf("=== COLOCANDO BARCOS PARA %s ===\n\n", (*jugadores)[i].Nom_Jugador);
                     colocarBarcos(&(*jugadores)[i], *barcosElegidos, numBarcos, tam_tablero);
@@ -187,7 +194,6 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     printf("\nPresiona Enter para continuar...");
                     getchar();
                 }
-                *colocados = 1;
                 printf("\n¡Todos los barcos han sido colocados!\n");
                 printf("Preparados para comenzar la batalla...\n");
                 Sleep(500);
@@ -345,6 +351,13 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                 Sleep(1000);
                 return;
             case 3:
+                //resumen Partida
+                resumenPartida(*jugadores, tam_tablero);
+
+                printf("\nPresiona Enter para continuar...");
+                limpiarBuffer();
+                return;
+            case 4:
                 return;
         }
     }
