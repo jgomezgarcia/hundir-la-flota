@@ -4,7 +4,7 @@
 
 static int buscarBarco(int, int, int, char **, char **, int **, int **, int *);
 
-// Funci�n auxiliar para recorrer el barco completo (DFS)
+// Función auxiliar para recorrer el barco completo (DFS)
 static int buscarBarco(int fila, int columna, int tam, char **flota, char **oponente, int **visitado, int **coordenadas, int *contador) {
     int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
     int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
@@ -43,7 +43,11 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
         auxVisitado[i] = calloc(tam_tablero, sizeof(int));
     }
     for (int i = 0; i < tam_tablero * tam_tablero; i++) {
-        coordenadas[i] = malloc(2 * sizeof(int));  // cada posici�n guarda [fila, columna]
+        coordenadas[i] = malloc(2 * sizeof(int));  // cada posición guarda [fila, columna]
+    }
+
+    if(tableroOponente[fila][columna] == 'A' || tableroOponente[fila][columna] == 'H' || tableroOponente[fila][columna] == 'T'){
+      return REPETIDO;
     }
 
     // Comprobamos el disparo
@@ -58,6 +62,25 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
                 int x = coordenadas[i][0];
                 int y = coordenadas[i][1];
                 tableroOponente[x][y] = 'H';
+            }
+
+            // ← insertar aquí: marcar adyacentes como agua
+            int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+            int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+            for (int i = 0; i < contador; i++) {
+                int x = coordenadas[i][0];
+                int y = coordenadas[i][1];
+                for (int k = 0; k < 8; k++) {
+                    int nx = x + dx[k];
+                    int ny = y + dy[k];
+
+                    if (nx >= 0 && nx < tam_tablero && ny >= 0 && ny < tam_tablero) {
+                        if (tableroOponente[nx][ny] == '-') {
+                            tableroOponente[nx][ny] = 'A';
+                        }
+                    }
+                }
             }
 
             // Liberar memoria antes de retornar
@@ -89,3 +112,8 @@ resultado resultadoDisparo(int fila, int columna, int tam_tablero, char **tabler
     }
 }
 
+
+void cambiarTurno(jugador *jugadores, int jugadorTurno){
+  jugadores[!jugadorTurno].turno = 1;
+  jugadores[jugadorTurno].turno = 0;
+}

@@ -261,8 +261,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     switch(resultadoDisparoPartida){
                       case AGUA:
                         printf("Ha disparado en agua, pierde su turno. \n");
-                        (*jugadores)[!indexJugadorTurno].turno = 1;
-                        (*jugadores)[indexJugadorTurno].turno = 0;
+                        cambiarTurno(*jugadores, indexJugadorTurno);
                         break;
 
                       case TOCADO:
@@ -272,6 +271,10 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                       case HUNDIDO:
                         printf("Enhorabuena, ha hundido un barco, siga disparando. \n");
                         (*jugadores)[!indexJugadorTurno].Num_Barcos -= 1;
+                        break;
+                      case REPETIDO:
+                            printf("Disparo repetido. Calcule bien la proxima. \n");
+                            cambiarTurno(*jugadores, indexJugadorTurno);
                         break;
                     }
                     preguntaSalir(&salir);
@@ -290,8 +293,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                     switch (resultadoDisparoPartida) {
                         case AGUA:
                             printf("Disparo automatico fue agua. Pierde su turno.\n");
-                            (*jugadores)[!indexJugadorTurno].turno = 1;
-                            (*jugadores)[indexJugadorTurno].turno = 0;
+                            cambiarTurno(*jugadores, indexJugadorTurno);
                             tocado = 0;
                             direccion_fila = 0;
                             direccion_columna = 0;
@@ -319,6 +321,10 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                             printf("\nPresiona Enter para continuar...");
                             limpiarBuffer();
                             break;
+                        case REPETIDO:
+                            printf("Disparo repetido. Calcule bien la proxima. \n");
+                            cambiarTurno(*jugadores, indexJugadorTurno);
+                        break;
                         }
                     preguntaSalir(&salir);
                     system("cls");
