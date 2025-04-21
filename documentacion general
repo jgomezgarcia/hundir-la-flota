@@ -1,6 +1,8 @@
 // descripcion funcional: describir de forma breve y precisa, el objetivo del programa. Ademas sus funcionalidades claves del juego en este caso. 
 ("nose si va incluido en otra parte, indicar la modularidad de forma genérica).
 
+// Descripion breve 
+
 Hundir la flota es un juego de estrategia para dos jugadores. Cada uno coloca en secreto sus barcos en un tablero. Por turnos, intentan adivinar las posiciones del rival lanzando disparos (coordenadas).
 El objetivo es hundir todos los barcos del oponente antes de que él hunda los tuyos, ganará quien destruya primero toda la flota enemiga.
 
