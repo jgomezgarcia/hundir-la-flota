@@ -6,8 +6,8 @@
 #include <windows.h>
 #include "configuracion.h"
 
-#define CONFIG_BARCOS "./configurables/barcos.txt"
-#define GUARDAR_PARTIDA "./configurables/juego.txt"
+#define CONFIG_BARCOS "./barcos.txt"
+#define GUARDAR_PARTIDA "./juego.txt"
 #define PORCENTAJE_AGUA 0.6
 
 
@@ -24,8 +24,8 @@ static void liberarTableros(int , char **, char **);
 static void recuperarTableros(char **, char *, int, FILE *);
 
 
-//PrecondiciÛn: recibir una cadena ya inicializada y recibe por referencia la estructura barco
-//PoscondiciÛn: separa la cadena por tokens
+//Precondici√≥n: recibir una cadena ya inicializada y recibe por referencia la estructura barco
+//Poscondici√≥n: separa la cadena por tokens
 static void desglosarInfoBarcos(char *cadDesglosar, barcos *barcosInfo){
   char *infoDesglosada;
 
@@ -35,12 +35,12 @@ static void desglosarInfoBarcos(char *cadDesglosar, barcos *barcosInfo){
   infoDesglosada = strtok(NULL, "-");       //Obtenemos el segundo con el id
   barcosInfo->Id_Barco = infoDesglosada[0];
 
-  infoDesglosada = strtok(NULL, "-");         //Obtenemos el tercero con el tamaÒo
+  infoDesglosada = strtok(NULL, "-");         //Obtenemos el tercero con el tama√±o
   barcosInfo->Tam_Barco = atoi(infoDesglosada);
 }
 
-//PrecondiciÛn: recibir un fichero ya abierto
-//PoscondiciÛn: devolver el n˙mero de lineas del fichero
+//Precondici√≥n: recibir un fichero ya abierto
+//Poscondici√≥n: devolver el n√∫mero de lineas del fichero
 static int numLineasFichero(FILE *ficheroContar){
   char bufferTemporal[40];
   int numLineas = 0;
@@ -53,8 +53,8 @@ static int numLineasFichero(FILE *ficheroContar){
   return numLineas;
 }
 
-//PrecondiciÛn: {tam_tablero >= 3}
-//PoscondiciÛn: devuelve puntero a matriz de char guardada en memoria
+//Precondici√≥n: {tam_tablero >= 3}
+//Poscondici√≥n: devuelve puntero a matriz de char guardada en memoria
 static char ** reservar_tablero(int tam_Tablero){
   char **tablero;
   tablero = (char **)malloc(tam_Tablero*sizeof(char *));
@@ -65,8 +65,8 @@ static char ** reservar_tablero(int tam_Tablero){
   return tablero;
 }
 
-//PrecondiciÛn: {*nBarcosDisponibles > 0}
-//PoscondiciÛn: devuelve la estructura de barcos ya inicializada con los disponibles
+//Precondici√≥n: {*nBarcosDisponibles > 0}
+//Poscondici√≥n: devuelve la estructura de barcos ya inicializada con los disponibles
 static barcos *leerBarcos(int *nBarcosDisponibles){
   barcos *barcosDisponibles;
   FILE *fBarcos;
@@ -76,7 +76,7 @@ static barcos *leerBarcos(int *nBarcosDisponibles){
   fBarcos = fopen(CONFIG_BARCOS, "r");
 
   if(fBarcos == NULL){
-    printf("No se pudo abrir el fichero de configuraciÛn de barcos. \n");
+    printf("No se pudo abrir el fichero de configuraci√≥n de barcos. \n");
     exit(1);
   }
 
@@ -98,8 +98,8 @@ static barcos *leerBarcos(int *nBarcosDisponibles){
   return barcosDisponibles;
 }
 
-//PrecondiciÛn: {nBarcos > 0 ^ *barcosListados != NULL}
-//PoscondiciÛn: imprime por pantalla los barcos disponibles leidos de fichero
+//Precondici√≥n: {nBarcos > 0 ^ *barcosListados != NULL}
+//Poscondici√≥n: imprime por pantalla los barcos disponibles leidos de fichero
 static void listarBarcos(int nBarcos, barcos *barcosListados){
   printf("--- BARCOS JUGABLES ---\n");
   printf("%-15s %-5s %-5s\n", "Nombre", "ID", "Tam");
@@ -109,8 +109,8 @@ static void listarBarcos(int nBarcos, barcos *barcosListados){
   printf("--------------------------\n");
 }
 
-//PrecondiciÛn: {id != NULL, barcosDisponibles != NULL, nBarcosDisponibles > 0}
-//PoscondiciÛn: devuelve un entero con el Ìndice del barco encontrado
+//Precondici√≥n: {id != NULL, barcosDisponibles != NULL, nBarcosDisponibles > 0}
+//Poscondici√≥n: devuelve un entero con el √≠ndice del barco encontrado
 static int indicePorIdBarco(char id, barcos *barcosDisponibles, int nBarcosDisponibles){
   for(int i = 0; i < nBarcosDisponibles; i++){
     if(barcosDisponibles[i].Id_Barco == id){
@@ -121,8 +121,8 @@ static int indicePorIdBarco(char id, barcos *barcosDisponibles, int nBarcosDispo
   return -1;
 }
 
-//PrecondiciÛn: {*aux != NULL, tamano > 0}
-//PoscondiciÛn: devuelve la cadena eliminando \n  y sustituyendolo por \0
+//Precondici√≥n: {*aux != NULL, tamano > 0}
+//Poscondici√≥n: devuelve la cadena eliminando \n  y sustituyendolo por \0
 static void eliminarSalto(char *aux, int tamano){
   for(int i = 0; i < tamano; i++){
     if(aux[i] == '\n'){
@@ -131,11 +131,11 @@ static void eliminarSalto(char *aux, int tamano){
   }
 }
 
-//PrecondiciÛn: {**flota != NULL, **oponente != NULL, tam_tablero >= 3}
-//PoscondiciÛn: inicializa ambos tableros asignandole caracteres a cada posiciÛn
+//Precondici√≥n: {**flota != NULL, **oponente != NULL, tam_tablero >= 3}
+//Poscondici√≥n: inicializa ambos tableros asignandole caracteres a cada posici√≥n
 
-//PrecondiciÛn: recibir una cadena ya inicializada y recibe por referencia la estructura barco
-//PoscondiciÛn: devuelve 1 si es valido y 0 sino lo es
+//Precondici√≥n: recibir una cadena ya inicializada y recibe por referencia la estructura barco
+//Poscondici√≥n: devuelve 1 si es valido y 0 sino lo es
 static int validarNumBarcos(int tamBarcos, int tamTablero){
   int espacioTablero, aguaDisponible;
   float porcentajeAguaDisponible;
@@ -152,8 +152,8 @@ static int validarNumBarcos(int tamBarcos, int tamTablero){
 
 }
 
-//PrecondiciÛn: recibir los tableros ya inicializados, tam >= 3, fichero ya abierto
-//PoscondiciÛn: vuelca en fichero los tableros
+//Precondici√≥n: recibir los tableros ya inicializados, tam >= 3, fichero ya abierto
+//Poscondici√≥n: vuelca en fichero los tableros
 static void volcarEnFicheroTableros(char **flota, char **oponente, int tam, FILE *f){
   if(f == NULL){
     printf("No se pudo abrir el fichero juego.txt. \n");
@@ -174,8 +174,8 @@ static void volcarEnFicheroTableros(char **flota, char **oponente, int tam, FILE
   }
 }
 
-//PrecondiciÛn: tam_tablero >= 3, tableros con memoria reservada
-//PoscondiciÛn: elimina de memoria el espacio reservado para los tableros
+//Precondici√≥n: tam_tablero >= 3, tableros con memoria reservada
+//Poscondici√≥n: elimina de memoria el espacio reservado para los tableros
 static void liberarTableros(int tam_tablero, char **flota, char **oponente){
   for(int i = 0; i < tam_tablero; i++){
     free(flota[i]);
@@ -199,7 +199,7 @@ static void recuperarTableros(char **tablero, char *buffer, int tamTableros, FIL
    }
 }
 
-// FunciÛn para contar barcos hundidos de un jugador
+// Funci√≥n para contar barcos hundidos de un jugador
 int contar_hundidos_jugador(jugador *jug, int tamTablero) {
     if (jug == NULL || jug->Tablero_oponente == NULL) return 0;
 
@@ -227,7 +227,7 @@ int contar_hundidos_jugador(jugador *jug, int tamTablero) {
                 int *cola_y = (int*)malloc(tamTablero * tamTablero * sizeof(int));
                 int frente = 0, final = 0;
 
-                // Marcamos y aÒadimos la posiciÛn inicial
+                // Marcamos y a√±adimos la posici√≥n inicial
                 visitado[i][j] = 1;
                 cola_x[final] = i;
                 cola_y[final] = j;
@@ -243,7 +243,7 @@ int contar_hundidos_jugador(jugador *jug, int tamTablero) {
                         int nx = x + dir[d][0];
                         int ny = y + dir[d][1];
 
-                        // Verificamos lÌmites y si es parte del mismo barco no visitado
+                        // Verificamos l√≠mites y si es parte del mismo barco no visitado
                         if (nx >= 0 && nx < tamTablero && ny >= 0 && ny < tamTablero &&
                             jug->Tablero_oponente[nx][ny] == 'H' && visitado[nx][ny] == 0) {
                             visitado[nx][ny] = 1;
@@ -271,8 +271,8 @@ int contar_hundidos_jugador(jugador *jug, int tamTablero) {
 
 /*  FUNCIONES PUBLICAS  */
 
-//PrecondiciÛn: memoria reservada para ambas tableros y tam_tablero >= 3
-//PoscondiciÛn: Devuelve los tableros con valores ya asignados
+//Precondici√≥n: memoria reservada para ambas tableros y tam_tablero >= 3
+//Poscondici√≥n: Devuelve los tableros con valores ya asignados
 void inicializarTableros(char **flota, char**oponente, int tam_tablero){
   for(int i = 0; i < tam_tablero; i++){
     for(int j = 0; j < tam_tablero; j++){
@@ -282,8 +282,8 @@ void inicializarTableros(char **flota, char**oponente, int tam_tablero){
   }
 }
 
-//PrecondiciÛn: {nBarcosJugar > 0, tamListaElegidos > 0; tam_tablero >= 3}
-//PoscondiciÛn: devuelve los barcos elegidos por el usuario
+//Precondici√≥n: {nBarcosJugar > 0, tamListaElegidos > 0; tam_tablero >= 3}
+//Poscondici√≥n: devuelve los barcos elegidos por el usuario
 barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_tablero){
     int sumaBarcosIntroducidos, indiceBarcoElegido, indicePorId, cantBarcosTipo, nBarcosDisponibles, barcosCorrectos , tamTotalBarcos;
     char tipoBarco;
@@ -292,13 +292,13 @@ barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_table
     barcosDisponibles = leerBarcos(&nBarcosDisponibles); //Carga los barcos jugables almacenado en barcos.txt
 
     do{
-      printf("Introduzca el tamaÒo de su tablero: ");
+      printf("Introduzca el tama√±o de su tablero(Recuerde tama√±o m√≠nimo de 5x5): ");
       scanf("%d", tam_tablero);
-    }while(*tam_tablero < 3);
+    }while(*tam_tablero < 5);
 
     do{
       listarBarcos(nBarcosDisponibles, barcosDisponibles);
-      printf("Introduzca la cantidad de barcos deseados para jugar.\nTenga en cuenta que su tablero tiene %d espacios disponible y los barcos no deben ocupar m·s del 40%%: ", (*tam_tablero)*(*tam_tablero));
+      printf("Introduzca la cantidad de barcos deseados para jugar.\nTenga en cuenta que su tablero tiene %d espacios disponible y los barcos no deben ocupar m√°s del 40%%: ", (*tam_tablero)*(*tam_tablero));
       scanf("%d", nBarcosJugar);
       system("cls");
     }while(*nBarcosJugar <= 0);
@@ -329,7 +329,7 @@ barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_table
 
 
           if(indicePorId != -1){ //Si encuentra el id pide al usuario la cantidad que desea
-            printf("Introduzca el n˙mero de barcos del tipo %c:", tipoBarco);
+            printf("Introduzca el n√∫mero de barcos del tipo %c:", tipoBarco);
             scanf("%d", &cantBarcosTipo);
 
             sumaBarcosIntroducidos += cantBarcosTipo;
@@ -352,7 +352,7 @@ barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_table
             }
 
           } else {
-            printf("Id de barco inv·lido introduzca otro. \n");
+            printf("Id de barco inv√°lido introduzca otro. \n");
           }
 
       }while(sumaBarcosIntroducidos < *nBarcosJugar);
@@ -364,7 +364,7 @@ barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_table
         printf("Barcos cargados correctamente. \n");
         Sleep(1000);
       } else {
-        printf("Los barcos elegidos ocupan m·s del 40%% del espacio del tablero.\nPor favor, pruebe otra combinaciÛn.\n");
+        printf("Los barcos elegidos ocupan m√°s del 40%% del espacio del tablero.\nPor favor, pruebe otra combinaci√≥n.\n");
       }
     }
 
@@ -374,8 +374,8 @@ barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_table
     return barcosJugar;
 }
 
-//PrecondiciÛn: {tam_tablero >= 3 ^ nBarcos > 0}
-//PoscondiciÛn: Devuelve la estructura jugador ya cargada con la configuraciÛn elegida
+//Precondici√≥n: {tam_tablero >= 3 ^ nBarcos > 0}
+//Poscondici√≥n: Devuelve la estructura jugador ya cargada con la configuraci√≥n elegida
 jugador *configurarJugador(int tam_tablero, int nBarcos){
   jugador *jugadorConfigurar;
 
@@ -393,22 +393,22 @@ jugador *configurarJugador(int tam_tablero, int nBarcos){
     eliminarSalto(jugadorConfigurar[i].Nom_Jugador, LONGITUD_NOMBRE);
 
     do{
-      printf("Introduzca el tipo de disparo para el jugador %s, Autom·tico(A) o Manual(M): ", jugadorConfigurar[i].Nom_Jugador);
+      printf("Introduzca el tipo de disparo para el jugador %s, Autom√°tico(A) o Manual(M): ", jugadorConfigurar[i].Nom_Jugador);
       scanf("%c", &tipoDisparo);
       printf("\n");
       tipoDisparo = toupper(tipoDisparo);
       fflush(stdin);
-    } while(tipoDisparo != 'A' && tipoDisparo != 'M');  //Controla que el usuario no introduzca datos inv·lidos
+    } while(tipoDisparo != 'A' && tipoDisparo != 'M');  //Controla que el usuario no introduzca datos inv√°lidos
 
     jugadorConfigurar[i].Tipo_Disparo = tipoDisparo;  //Una vez comprobado almacena
 
 
     jugadorConfigurar[i].turno = 0; //Inicializamos todos los turnos a cero para luego modifcarlos
-    jugadorConfigurar[i].Id_Jugador = i;    //Id seg˙n la posiciÛn del jugadors
+    jugadorConfigurar[i].Id_Jugador = i;    //Id seg√∫n la posici√≥n del jugadors
     jugadorConfigurar[i].Tablero_flota = reservar_tablero(tam_tablero);   //Reserva para ambos tableros
     jugadorConfigurar[i].Tablero_oponente = reservar_tablero(tam_tablero);
     inicializarTableros(jugadorConfigurar[i].Tablero_flota, jugadorConfigurar[i].Tablero_oponente, tam_tablero); //Tras su reserva se inicializan
-    jugadorConfigurar[i].Num_Barcos = nBarcos;    //N˙mero de barcos que van a jugarse en la partida
+    jugadorConfigurar[i].Num_Barcos = nBarcos;    //N√∫mero de barcos que van a jugarse en la partida
     jugadorConfigurar[i].Num_Disparos = 0;
     jugadorConfigurar[i].Ganador_Ronda = 0;
   }
@@ -418,31 +418,31 @@ jugador *configurarJugador(int tam_tablero, int nBarcos){
       scanf("%c", &tipoTurno);
       tipoTurno = toupper(tipoTurno);
       fflush(stdin);
-  } while(tipoTurno != 'S' && tipoTurno != 'N');  //Controla caracteres inv·lidos
+  } while(tipoTurno != 'S' && tipoTurno != 'N');  //Controla caracteres inv√°lidos
 
   if(tipoTurno == 'S'){
     do{
-      printf("Que jugador comenzar· la partida, introduzca su n˙mero, (1/2): ");
+      printf("Que jugador comenzar√° la partida, introduzca su n√∫mero, (1/2): ");
       scanf("%d", &turno);
       printf("\n");
       jugadorConfigurar[turno-1].turno = 1;//Aquel jugador elegido se el asigna turno 1
     }while(turno > 2 || turno <= 0);
   } else {
-    printf("Turno asignado autom·ticamente... \n");
+    printf("Turno asignado autom√°ticamente... \n");
     printf("\n");
     turno = rand() % 2;   //Devuelve un indice aleatorio
     jugadorConfigurar[turno].turno = 1;
     Sleep(1000);
   }
 
-  printf("ConfiguraciÛn cargada correctamente. \n");
+  printf("Configuraci√≥n cargada correctamente. \n");
   printf("\n");
   system("cls");
   return jugadorConfigurar;
 }
 
-//PrecondiciÛn: recibir  ya inicializado el tablero y el tamaÒo de tableros que debe ser mayor de 3
-//PoscondiciÛn: imprime tablero flota
+//Precondici√≥n: recibir  ya inicializado el tablero y el tama√±o de tableros que debe ser mayor de 3
+//Poscondici√≥n: imprime tablero flota
 void imprimirTableroFlota(char **tableroFlota, int tam_tableros){
   printf("TABLERO FLOTA");
     printf("\n   ");
@@ -461,8 +461,8 @@ void imprimirTableroFlota(char **tableroFlota, int tam_tableros){
     printf("\n");
 }
 
-//PrecondiciÛn: recibir  ya inicializado el tablero y el tamaÒo de tableros que debe ser mayor de 3
-//PoscondiciÛn: imprime tablero oponente
+//Precondici√≥n: recibir  ya inicializado el tablero y el tama√±o de tableros que debe ser mayor de 3
+//Poscondici√≥n: imprime tablero oponente
 void imprimirTableroOponente(char **tableroOponente, int tam_tableros){
   printf("TABLERO OPONENTE\n");
     printf("\n   ");
@@ -481,8 +481,8 @@ void imprimirTableroOponente(char **tableroOponente, int tam_tableros){
     printf("\n");
 }
 
-//PrecondiciÛn {tam_tableros >= 3; nBarcos > 0; barcosConfigurados != NULL; jugadoresConfigurados != NULL}
-//PoscondiciÛn: Imprime por pantalla toda la configuraciÛn elegida
+//Precondici√≥n {tam_tableros >= 3; nBarcos > 0; barcosConfigurados != NULL; jugadoresConfigurados != NULL}
+//Poscondici√≥n: Imprime por pantalla toda la configuraci√≥n elegida
 void mostrarConfiguracion(int tam_tableros, int nBarcos, barcos *barcosConfigurados, jugador *jugadoresConfigurados){
   barcos *barcosDisponibles;    //Se usa para contabilizar la cantidad elegida de cada tipo
   int numBarcosDisponibles, numBarcosTipo;
@@ -493,7 +493,7 @@ void mostrarConfiguracion(int tam_tableros, int nBarcos, barcos *barcosConfigura
   }
 
   if(barcosConfigurados == NULL || jugadoresConfigurados == NULL){
-    printf("No existe ninguna configuraciÛn cargada, vuelva m·s tarde. \n");
+    printf("No existe ninguna configuraci√≥n cargada, vuelva m√°s tarde. \n");
   }else {
     printf("--- CONFIGURACION CARGADA ---\n");
     printf("\n");
@@ -544,15 +544,15 @@ void mostrarConfiguracion(int tam_tableros, int nBarcos, barcos *barcosConfigura
 }
 
 
-//PrecondiciÛn: {barcosConfigurados != NULL, jugadoresConfigurados != NULL; tamListaBarcosElegidos > 0; nBarcos > 0; tam_tableros >= 3}
-//PoscondiciÛn: Vuelca en fichero los datos de partida, guardandolos permanentemente
+//Precondici√≥n: {barcosConfigurados != NULL, jugadoresConfigurados != NULL; tamListaBarcosElegidos > 0; nBarcos > 0; tam_tableros >= 3}
+//Poscondici√≥n: Vuelca en fichero los datos de partida, guardandolos permanentemente
 void guardarPartida(barcos *barcosConfigurados, jugador *jugadoresConfigurados, int tamListaBarcosElegidos, int nBarcos, int tam_tableros){
     FILE *fJugadores;
     int nBarcosDisponibles, cantBarcosRepetidos;
     barcos *barcosDisponibles = leerBarcos(&nBarcosDisponibles);
 
     if(barcosConfigurados == NULL || jugadoresConfigurados == NULL){
-      printf("No hay una configuraciÛn cargada, no puede guardar configuraciÛn. Vuelva m·s tarde. \n");
+      printf("No hay una configuraci√≥n cargada, no puede guardar configuraci√≥n. Vuelva m√°s tarde. \n");
       Sleep(1000);
     }
 
@@ -563,7 +563,7 @@ void guardarPartida(barcos *barcosConfigurados, jugador *jugadoresConfigurados, 
     }
 
 
-    fprintf(fJugadores, "%d-%d-%d\n", tam_tableros, nBarcos, tamListaBarcosElegidos); //Imprime la primera lÌnea
+    fprintf(fJugadores, "%d-%d-%d\n", tam_tableros, nBarcos, tamListaBarcosElegidos); //Imprime la primera l√≠nea
 
     for(int i = 0; i < nBarcosDisponibles; i++){  //Encontramos la cantidad de cada tipo elegido
       cantBarcosRepetidos = 0;
@@ -572,11 +572,11 @@ void guardarPartida(barcos *barcosConfigurados, jugador *jugadoresConfigurados, 
           cantBarcosRepetidos++;
       }
       if(cantBarcosRepetidos != 0)
-        fprintf(fJugadores, "%c-%d\n", barcosDisponibles[i].Id_Barco, cantBarcosRepetidos);   //Imprime lÌnea con su id y cantidad
+        fprintf(fJugadores, "%c-%d\n", barcosDisponibles[i].Id_Barco, cantBarcosRepetidos);   //Imprime l√≠nea con su id y cantidad
     }
 
     for(int i = 0; i < MAX_JUGADORES; i++){
-      //Para cada jugador se imprime su informaciÛn correspondiente
+      //Para cada jugador se imprime su informaci√≥n correspondiente
       fprintf(fJugadores, "%d-%s-%d-%c-%d\n", jugadoresConfigurados[i].Id_Jugador, jugadoresConfigurados[i].Nom_Jugador, jugadoresConfigurados[i].Num_Disparos, jugadoresConfigurados[i].Tipo_Disparo, jugadoresConfigurados[i].Ganador_Ronda);
       volcarEnFicheroTableros(jugadoresConfigurados[i].Tablero_flota, jugadoresConfigurados[i].Tablero_oponente, tam_tableros,fJugadores);
     }
@@ -585,14 +585,14 @@ void guardarPartida(barcos *barcosConfigurados, jugador *jugadoresConfigurados, 
     free(barcosDisponibles);
 }
 
-//PrecondiciÛn = {tamTableros != NULL; nBarcosElegidos != NULL}
-//PoscondiciÛn = devuelve un p˙ntero a esa estructura con todos los datos cargados de nuevo
+//Precondici√≥n = {tamTableros != NULL; nBarcosElegidos != NULL}
+//Poscondici√≥n = devuelve un p√∫ntero a esa estructura con todos los datos cargados de nuevo
 barcos * recuperarBarcos(int *tamTableros, int *nBarcosElegidos, int *tamListaBarcos){
   barcos *recuperados;
-  barcos *disponibles;    //Se usara para en funciÛn de id recuperar sus otros datos
+  barcos *disponibles;    //Se usara para en funci√≥n de id recuperar sus otros datos
 
   FILE *fJuego;
-  char info[50];  //Buffer para la informaciÛn
+  char info[50];  //Buffer para la informaci√≥n
   int nBarcosDisponibles, cantBarco, indexBarcos = 0;
   char idBarco;
   disponibles = leerBarcos(&nBarcosDisponibles);
@@ -604,13 +604,13 @@ barcos * recuperarBarcos(int *tamTableros, int *nBarcosElegidos, int *tamListaBa
   }
 
   fgets(info, 50, fJuego);
-  *tamTableros = atoi(strtok(info, "-"));   //Desglose de informaciÛn
+  *tamTableros = atoi(strtok(info, "-"));   //Desglose de informaci√≥n
   *nBarcosElegidos = atoi(strtok(NULL, "-"));
   *tamListaBarcos = atoi(strtok(NULL, "-"));
 
   recuperados = (barcos *)malloc(*nBarcosElegidos * sizeof(barcos));
   if(recuperados == NULL){
-    printf("No se pudo reservar memorÌa para los barcos guardados. \n");
+    printf("No se pudo reservar memor√≠a para los barcos guardados. \n");
     exit(1);
   }
 
@@ -619,14 +619,14 @@ barcos * recuperarBarcos(int *tamTableros, int *nBarcosElegidos, int *tamListaBa
     idBarco = (strtok(info, "-"))[0];
     cantBarco = atoi(strtok(NULL, "-"));
 
-    for(int j = 0; j < cantBarco; j++){   //Almacena seg˙n la cantidad seleccionada
+    for(int j = 0; j < cantBarco; j++){   //Almacena seg√∫n la cantidad seleccionada
       recuperados[indexBarcos++].Id_Barco = idBarco;
     }
   }
 
   for(int i = 0; i < nBarcosDisponibles; i++){
     for(int j = 0; j < *nBarcosElegidos; j++){
-      if(disponibles[i].Id_Barco == recuperados[j].Id_Barco){   //Todo esto nos ayuda a recuperar el nombre y tamaÒo seg˙n el id recibido
+      if(disponibles[i].Id_Barco == recuperados[j].Id_Barco){   //Todo esto nos ayuda a recuperar el nombre y tama√±o seg√∫n el id recibido
         strcpy(recuperados[j].Nom_Barco, disponibles[i].Nom_Barco);
         recuperados[j].Tam_Barco = disponibles[i].Tam_Barco;
       }
@@ -662,7 +662,7 @@ jugador *recuperarJugadores(int tamTableros, int nBarcosElegidos, int tamListaBa
 
   traerTableros = (char *)malloc((tamTableros+2)*sizeof(char));
   if(traerTableros == NULL){
-    printf("No se pudo reservar memoria para el buffer que restablece los tableros. Compruebe el tamaÒo de los tableros.\n");
+    printf("No se pudo reservar memoria para el buffer que restablece los tableros. Compruebe el tama√±o de los tableros.\n");
     exit(1);
   }
 
@@ -698,8 +698,8 @@ jugador *recuperarJugadores(int tamTableros, int nBarcosElegidos, int tamListaBa
   return recuperados;
 }
 
-//PrecondiciÛn: barcosEliminar y jugadoresEliminar deben tener memoria reservada y tam_tablero >= 3
-//PoscondiciÛn: libera el espacio en memoria ocupado por las estructuras jugadores y barcos
+//Precondici√≥n: barcosEliminar y jugadoresEliminar deben tener memoria reservada y tam_tablero >= 3
+//Poscondici√≥n: libera el espacio en memoria ocupado por las estructuras jugadores y barcos
 void eliminarConfiguracion(barcos *barcosEliminar, jugador *jugadoresEliminar, int tam_tablero){
   for(int i = 0; i < MAX_JUGADORES; i++)
     liberarTableros(tam_tablero, jugadoresEliminar[i].Tablero_flota, jugadoresEliminar[i].Tablero_oponente);
