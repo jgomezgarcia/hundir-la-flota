@@ -136,3 +136,72 @@
 
 1745103800 c:\users\francisco\downloads\hundir-la-flota-desarrollo\pospartida.h
 
+1745423457 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\colocarflota.c
+	<stdio.h>
+	<stdlib.h>
+	"configuracion.h"
+	"colocarFlota.h"
+	"interfaces.h"
+	<time.h>
+
+1745423457 c:\users\kisko\downloads\hundir-la-flota-programaci-n\configuracion.h
+
+1745423457 c:\users\kisko\downloads\hundir-la-flota-programaci-n\colocarflota.h
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"configuracion.h"
+
+1745423457 c:\users\kisko\downloads\hundir-la-flota-programaci-n\interfaces.h
+	"configuracion.h"
+
+1745423457 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\configuracion.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<time.h>
+	<windows.h>
+	"configuracion.h"
+
+1745423457 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\disparoautomatico.c
+	<stdlib.h>
+	<time.h>
+	"resultadoDisparo.h"
+
+1745423457 c:\users\kisko\downloads\hundir-la-flota-programaci-n\resultadodisparo.h
+	"configuracion.h"
+
+1745423457 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\main.c
+	<stdio.h>
+	<stdlib.h>
+	"configuracion.h"
+	"interfaces.h"
+
+1745423457 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\pospartida.c
+	<stdio.h>
+	<stdlib.h>
+	"posPartida.h"
+
+1745423457 c:\users\kisko\downloads\hundir-la-flota-programaci-n\pospartida.h
+	"configuracion.h"
+
+1745423457 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\resultadodisparo.c
+	<stdio.h>
+	<stdlib.h>
+	"resultadoDisparo.h"
+
+1745424944 source:c:\users\kisko\downloads\hundir-la-flota-programaci-n\interfaces.c
+	<stdio.h>
+	<stdlib.h>
+	<windows.h>
+	"interfaces.h"
+	"configuracion.h"
+	"colocarFlota.h"
+	"posPartida.h"
+	"resultadoDisparo.h"
+	"disparoAutomatico.h"
+
+1745423457 c:\users\kisko\downloads\hundir-la-flota-programaci-n\disparoautomatico.h
+	"resultadoDisparo.h"
+

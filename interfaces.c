@@ -354,14 +354,15 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
             case 2:
                 for(int i=0; i<MAX_JUGADORES; i++){
                     inicializarTableros((*jugadores)[i].Tablero_flota, (*jugadores)[i].Tablero_oponente, tam_tablero);
+                    (*jugadores)[i].Num_Barcos = numBarcos;
                 }
                 printf("\nPartida reiniciada.\n");
                 Sleep(1000);
                 return;
             case 3:
                 //resumen Partida
-                if((*jugadores)[0].Ganador_Ronda == GANADOR || (*jugadores)[1].Ganador_Ronda == GANADOR){
-                    resumenPartida(*jugadores, tam_tablero);    
+               if((*jugadores)[0].Ganador_Ronda == GANADOR || (*jugadores)[1].Ganador_Ronda == GANADOR){
+                    resumenPartida(*jugadores, tam_tablero);
                 } else {
                     printf("Aun no ha terminado la partida. \n");
                 }
