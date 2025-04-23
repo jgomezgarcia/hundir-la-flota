@@ -1,122 +1,149 @@
 #include <stdlib.h>
-#include <stdbool.h>
-#include "configuracion.h"
-void disparo_automatico(char **tablero_oponente, int tam_tablero,
-                       int *fila, int *columna,
-                       int *ultimo_fila, int *ultimo_columna,
-                       int *tocado, int *direccion_fila, int *direccion_columna,
-                       int *impactos, int intentos_adicionales[8]) {
+#include <time.h>
+#include "resultadoDisparo.h"
 
-    const int direcciones[8][2] = {
-        {-1, 0}, {1, 0}, {0, -1}, {0, 1},    // N, S, O, E
-        {-1, -1}, {-1, 1}, {1, -1}, {1, 1}   // NO, NE, SO, SE
-    };
+typedef enum {ALEATORIO, ALREDEDOR, DIRECCION, CAMBIO_DIRECCION} estado;
 
-    static int direcciones_ordenadas[8];
-    static bool orden_inicializado = false;
+void disparoAutomatico(
+    char **tablero_oponente,
+    char **tablero_flota,
+    int tam_tablero,
+    int *fila, int *columna,
+    int *ultima_fila, int *ultima_columna,
+    int *numTocado,
+    estado *estadoDisparoAnterior,
+    int *ultima_direccionX, int *ultima_direccionY,
+    resultado *resultadoDisparoA
+) {
+    static int indice_direccion = 0;
+    static int primera_fila_tocado = -1;
+    static int primera_columna_tocado = -1;
+    static int necesita_cambio_direccion = 0;
 
-    // Si estamos persiguiendo un barco
-    if (*tocado) {
-        if (*direccion_fila != 0 || *direccion_columna != 0) {
-            // Continuar en la misma dirección
-            int nueva_fila = *ultimo_fila + *direccion_fila;
-            int nueva_columna = *ultimo_columna + *direccion_columna;
+    int dx[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int dy[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+    int nueva_fila, nueva_columna;
 
-            if (nueva_fila >= 0 && nueva_fila < tam_tablero &&
-                nueva_columna >= 0 && nueva_columna < tam_tablero &&
+    srand(time(NULL));
+
+    int disparoRealizado = 0;
+
+    // Modo ALEATORIO
+    if (*estadoDisparoAnterior == ALEATORIO && !disparoRealizado) {
+        do {
+            *fila = rand() % tam_tablero;
+            *columna = rand() % tam_tablero;
+        } while (tablero_oponente[*fila][*columna] != '-');
+
+        *resultadoDisparoA = resultadoDisparo(*fila, *columna, tam_tablero, tablero_flota, tablero_oponente);
+        disparoRealizado = 1;
+
+        if (*resultadoDisparoA == TOCADO) {
+            *estadoDisparoAnterior = ALREDEDOR;
+            *ultima_fila = *fila;
+            *ultima_columna = *columna;
+            primera_fila_tocado = *fila;
+            primera_columna_tocado = *columna;
+            indice_direccion = 0;
+        }
+    }
+
+    // Modo ALREDEDOR
+    if (*estadoDisparoAnterior == ALREDEDOR && !disparoRealizado) {
+        while (indice_direccion < 8 && !disparoRealizado) {
+            nueva_fila = *ultima_fila + dx[indice_direccion];
+            nueva_columna = *ultima_columna + dy[indice_direccion];
+
+            if (nueva_fila >= 0 && nueva_columna >= 0 &&
+                nueva_fila < tam_tablero && nueva_columna < tam_tablero &&
                 tablero_oponente[nueva_fila][nueva_columna] == '-') {
 
                 *fila = nueva_fila;
                 *columna = nueva_columna;
-                *ultimo_fila = nueva_fila;
-                *ultimo_columna = nueva_columna;
-                return;
-            } else {
-                // Probar la dirección opuesta
-                *direccion_fila = -(*direccion_fila);
-                *direccion_columna = -(*direccion_columna);
-                *ultimo_fila = *ultimo_fila - *direccion_fila;
-                *ultimo_columna = *ultimo_columna - *direccion_columna;
+                *resultadoDisparoA = resultadoDisparo(*fila, *columna, tam_tablero, tablero_flota, tablero_oponente);
+                disparoRealizado = 1;
 
-                int nueva_fila = *ultimo_fila + *direccion_fila;
-                int nueva_columna = *ultimo_columna + *direccion_columna;
-
-                if (nueva_fila >= 0 && nueva_fila < tam_tablero &&
-                    nueva_columna >= 0 && nueva_columna < tam_tablero &&
-                    tablero_oponente[nueva_fila][nueva_columna] == '-') {
-
-                    *fila = nueva_fila;
-                    *columna = nueva_columna;
-                    *ultimo_fila = nueva_fila;
-                    *ultimo_columna = nueva_columna;
-                    return;
-                }
-
-                // Si también falla, reiniciar seguimiento
-                *direccion_fila = 0;
-                *direccion_columna = 0;
-                *impactos = 0;
-                for (int i = 0; i < 8; i++) intentos_adicionales[i] = 0;
-                orden_inicializado = false;
-            }
-        }
-
-        // Si no tenemos una dirección definida
-        if (!orden_inicializado) {
-            for (int i = 0; i < 8; i++) direcciones_ordenadas[i] = i;
-
-            // Mezclar aleatoriamente (Fisher-Yates)
-            for (int i = 7; i > 0; i--) {
-                int j = rand() % (i + 1);
-                int temp = direcciones_ordenadas[i];
-                direcciones_ordenadas[i] = direcciones_ordenadas[j];
-                direcciones_ordenadas[j] = temp;
-            }
-
-            orden_inicializado = true;
-        }
-
-        // Probar direcciones aleatorias adyacentes
-        for (int i = 0; i < 8; i++) {
-            int dir_idx = direcciones_ordenadas[i];
-
-            if (intentos_adicionales[dir_idx] == 0) {
-                int nueva_fila = *ultimo_fila + direcciones[dir_idx][0];
-                int nueva_columna = *ultimo_columna + direcciones[dir_idx][1];
-
-                intentos_adicionales[dir_idx] = 1;
-
-                if (nueva_fila >= 0 && nueva_fila < tam_tablero &&
-                    nueva_columna >= 0 && nueva_columna < tam_tablero &&
-                    tablero_oponente[nueva_fila][nueva_columna] == '-') {
-
-                    *fila = nueva_fila;
-                    *columna = nueva_columna;
-
-                    *direccion_fila = direcciones[dir_idx][0];
-                    *direccion_columna = direcciones[dir_idx][1];
-                    *impactos += 1;
-                    *ultimo_fila = nueva_fila;
-                    *ultimo_columna = nueva_columna;
-
-                    return;
+                if (*resultadoDisparoA == TOCADO) {
+                    *estadoDisparoAnterior = DIRECCION;
+                    *ultima_direccionX = dx[indice_direccion];
+                    *ultima_direccionY = dy[indice_direccion];
+                    *ultima_fila = *fila;
+                    *ultima_columna = *columna;
+                } else if (*resultadoDisparoA == HUNDIDO) {
+                    *estadoDisparoAnterior = ALEATORIO;
+                    *numTocado = 0;
                 }
             }
+            indice_direccion++;
         }
 
-        // Si agotamos todas las direcciones
-        *tocado = 0;
-        *direccion_fila = 0;
-        *direccion_columna = 0;
-        *impactos = 0;
-        orden_inicializado = false;
-        for (int i = 0; i < 8; i++) intentos_adicionales[i] = 0;
+        if (!disparoRealizado) {
+            *estadoDisparoAnterior = ALEATORIO;
+        }
     }
 
-    // Si no se está siguiendo ningún barco
-    do {
-        *fila = rand() % tam_tablero;
-        *columna = rand() % tam_tablero;
-    } while (tablero_oponente[*fila][*columna] != '-');
-}
+    // Modo DIRECCION
+    if (*estadoDisparoAnterior == DIRECCION && !disparoRealizado) {
+        nueva_fila = *ultima_fila + *ultima_direccionX;
+        nueva_columna = *ultima_columna + *ultima_direccionY;
 
+        if (nueva_fila >= 0 && nueva_columna >= 0 &&
+            nueva_fila < tam_tablero && nueva_columna < tam_tablero &&
+            tablero_oponente[nueva_fila][nueva_columna] == '-') {
+
+            *fila = nueva_fila;
+            *columna = nueva_columna;
+            *resultadoDisparoA = resultadoDisparo(*fila, *columna, tam_tablero, tablero_flota, tablero_oponente);
+            disparoRealizado = 1;
+
+            if (*resultadoDisparoA == TOCADO) {
+                *ultima_fila = *fila;
+                *ultima_columna = *columna;
+            } else if (*resultadoDisparoA == HUNDIDO) {
+                *estadoDisparoAnterior = ALEATORIO;
+                *numTocado = 0;
+            } else {
+                *estadoDisparoAnterior = CAMBIO_DIRECCION;
+                *ultima_fila = primera_fila_tocado;
+                *ultima_columna = primera_columna_tocado;
+                *ultima_direccionX *= -1;
+                *ultima_direccionY *= -1;
+            }
+        } else {
+            *estadoDisparoAnterior = CAMBIO_DIRECCION;
+            *ultima_fila = primera_fila_tocado;
+            *ultima_columna = primera_columna_tocado;
+            *ultima_direccionX *= -1;
+            *ultima_direccionY *= -1;
+        }
+    }
+
+    // Modo CAMBIO_DIRECCION
+    if (*estadoDisparoAnterior == CAMBIO_DIRECCION && !disparoRealizado) {
+        nueva_fila = *ultima_fila + *ultima_direccionX;
+        nueva_columna = *ultima_columna + *ultima_direccionY;
+
+        if (nueva_fila >= 0 && nueva_columna >= 0 &&
+            nueva_fila < tam_tablero && nueva_columna < tam_tablero &&
+            tablero_oponente[nueva_fila][nueva_columna] == '-') {
+
+            *fila = nueva_fila;
+            *columna = nueva_columna;
+            *resultadoDisparoA = resultadoDisparo(*fila, *columna, tam_tablero, tablero_flota, tablero_oponente);
+            disparoRealizado = 1;
+
+            if (*resultadoDisparoA == TOCADO) {
+                *estadoDisparoAnterior = DIRECCION;
+                *ultima_fila = *fila;
+                *ultima_columna = *columna;
+            } else if (*resultadoDisparoA == HUNDIDO) {
+                *estadoDisparoAnterior = ALEATORIO;
+                *numTocado = 0;
+            } else {
+                *estadoDisparoAnterior = ALEATORIO;
+            }
+        } else {
+            *estadoDisparoAnterior = ALEATORIO;
+        }
+    }
+}

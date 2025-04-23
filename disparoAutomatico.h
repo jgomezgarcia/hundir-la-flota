@@ -1,24 +1,18 @@
-#ifndef DISPARO_AUTOMATICO_H
-#define DISPARO_AUTOMATICO_H
+#ifndef __disparoAutomatico__H__
+#define __disparoAutomatico__H__
 
-#include "configuracion.h"
 #include "resultadoDisparo.h"
-#include <stdlib.h>
-#include <time.h>
-
-
-void disparo_automatico(
+typedef enum{ALEATORIO, ALREDEDOR, DIRECCION} estado;
+void disparoAutomatico(
     char **tablero_oponente,
+    char **tablero_flota,
     int tam_tablero,
-    int *fila,
-    int *columna,
-    int *ultimo_fila,
-    int *ultimo_columna,
-    int *tocado,
-    int *direccion_fila,
-    int *direccion_columna,
-    int *impactos,
-    int intentos_adicionales[8]  // Array de control para saber qué direcciones ya fueron probadas
+    int *fila, int *columna,
+    int *ultima_fila, int *ultima_columna,
+    int *numTocado,
+    estado *estadoDisparoAnterior,
+    int *ultima_direccionX, int *ultima_direccionY,
+    resultado *resultadoDisparo
 );
 
-#endif
+#endif // __disparoAutomatico__H__
