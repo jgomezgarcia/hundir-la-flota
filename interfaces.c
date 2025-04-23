@@ -367,7 +367,7 @@ void menuPartida(jugador **jugadores, barcos **barcosElegidos, int tam_tablero, 
                 return;
             case 3:
                 //resumen Partida
-                if((*jugadores)[0].ganador == GANADOR || (*jugadores)[0].ganador == GANADOR){
+                if((*jugadores)[0].Ganador_Ronda == GANADOR || (*jugadores)[0].Ganador_Ronda == GANADOR){
                    resumenPartida(*jugadores, tam_tablero); 
                 }else {
                     printf("Aún no ha terminado la partida. \n");
