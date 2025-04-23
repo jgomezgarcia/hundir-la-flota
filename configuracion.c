@@ -292,7 +292,7 @@ barcos *barcosParaJugar(int *nBarcosJugar, int *tamListaElegidos, int *tam_table
     barcosDisponibles = leerBarcos(&nBarcosDisponibles); //Carga los barcos jugables almacenado en barcos.txt
 
     do{
-      printf("Introduzca el tamaño de su tablero(Recuerde tamaño mínimo de 5x5): ");
+      printf("Introduzca el tamano de su tablero(Recuerde tamano mínimo de 5x5): ");
       scanf("%d", tam_tablero);
     }while(*tam_tablero < 5);
 
