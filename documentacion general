@@ -1,0 +1,87 @@
+// descripcion funcional: describir de forma breve y precisa, el objetivo del programa. Ademas sus funcionalidades claves del juego en este caso. 
+("nose si va incluido en otra parte, indicar la modularidad de forma genérica).
+
+// Descripion breve 
+
+Hundir la flota es un juego de estrategia para dos jugadores. Cada uno coloca en secreto sus barcos en un tablero. Por turnos, intentan adivinar las posiciones del rival lanzando disparos (coordenadas).
+El objetivo es hundir todos los barcos del oponente antes de que él hunda los tuyos, ganará quien destruya primero toda la flota enemiga.
+
+---
+
+**Restricciones del problema**
+
+---
+
+ Respecto al **código**
+
+1. **No usar variables globales**  
+   - El uso de variables globales dificulta la depuración y el mantenimiento del código.  
+   - Toda la información debe manejarse mediante parámetros, estructuras o clases, garantizando encapsulamiento.
+
+2. **Alta cohesión**  
+   - Cada módulo o función debe realizar una única tarea claramente definida.  
+   - Esto facilita el testeo, la reutilización y el entendimiento del sistema.
+
+3. **Mínimo acoplamiento**  
+   - Los módulos o clases deben depender lo menos posible entre sí.  
+   - Cambios en una parte del sistema no deben afectar al resto, lo que promueve flexibilidad y escalabilidad.
+
+---
+
+Respecto a la **funcionalidad**
+
+1. **Colocar correctamente los barcos**  
+   - El sistema debe verificar que los barcos no se solapen ni se salgan del tablero.  
+   - Deben respetarse las reglas del juego: orientación válida y longitud específica para cada barco.
+
+2. **Dimensiones correctas para el tablero**  
+   - El tablero debe ser de dimensiones válidas (típicamente 10×10).  
+   - Cualquier intento de colocar barcos fuera de los límites debe ser gestionado correctamente por el sistema.
+
+3. **Algoritmo de disparo automático**  
+   - Se debe implementar un algoritmo que simule disparos automáticos, ya sea aleatorio o con lógica estratégica.  
+   - Este sistema debe evitar repetir disparos y registrar adecuadamente los resultados (agua, tocado, hundido).
+
+---
+
+// Documentación que describa cómo se descompone el problema en distintos subproblemas y los módulos asociados a cada uno de ellos. 
+
+Para el juego hundir la flota hemos hecho la siguiente descomposicion para realizar el desarrollo: el main.c que es el eje "jefe" de todo el resto de funciones, que
+van a estar guardadas en los distintos modulos. Ahora se encontraran hasta 6 modulos distintos los cuales abarcaran un rango distintos de funciones: primero y la más importante
+el modulo "interfaces" que se encargara de llevar a cabo el desarrollo del juego gracias a las distintas funciones que le aportan el resto de modulos, estando ligada y recibiendo
+funciones de todos los modulos. También tenemos el modulo "configuracion" la cual se encargara de la configuracion basica e inicial del juego, más modulos como "colocar flota" que recibiendo
+los tipos de barcos en un fichero se encargará de colocar estos en un tablero (creado en configuracion), "disparoAutomatico" un algoritmo que dispará automáticamente, no de manera
+aleatoria, sino con cienta lógica y se asociara con el modulo "resultadoDisparo", donde segun el disparo que reciba del jugador devolvera un valor a la interfaz, y por
+último pero no menos importante un último modulo "pospartida" que imprimira toda las estadisticas producidas a lo largo de la partida.
+
+En esta sección se describe con detalle las ventajas que ofrece el sistema a los usuarios y cómo se pueden obtener mediante su uso. 
+Debe describir, de una manera más completa y formal, el uso del sistema, así como las situaciones de error y los informes generados.
+
+
+Proyecto Principal  
+├── Configuración       # Módulo: Configuracion basica del juego
+│   ├── disp Auto       # Módulo: Dispositivos automáticos  
+│   ├── dis Result      # Módulo: Visualización de resultados  
+│   └── col Flota       # Módulo: Colocacion de barcos 
+└── Interfaces          # Módulo: Comunicación con otros sistemas  
+└── pospartida     # Módulo: Pospartida
+
+
+// Descripción del proceso de instalación
+
+No lo tngo muy claro xd hacerlo ustedes 
+
+// Descripcion del proceso de compilación
+
+No lo tngo muy claro xd hacerlo ustedes 
+
+// Cosas individuales
+
+-(8)Casos de Prueba
+-(9) Pruebas de Ruta Básica -
+-(7) pruebas de cajas blanca y de cajas negra 
+-(5) Documentación por Módulo (C) Para cada módulo (archivo .c/.h), incluir: propósito, funciones principales, dependencias..
+
+
+
+
